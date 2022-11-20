@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_baseline_home"
+        android:title="@string/nav_home"/>
+
+    <item
+        android:id="@+id/nav_credits"
+        android:icon="@drawable/ic_baseline_credit"
+        android:title="@string/nav_credits"/>
+
+    <item
+        android:id="@+id/nav_deposits"
+        android:icon="@drawable/ic_baseline_deposit"
+        android:title="@string/nav_deposits"/>
+
+    <item
+        android:id="@+id/nav_more_options"
+        android:icon="@drawable/ic_baseline_more_options"
+        android:title="@string/nav_more_options"/>
+</menu>

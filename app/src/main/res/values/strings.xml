@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Rates Calculator</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_credits">Credits</string>
+    <string name="nav_deposits">Deposits</string>
+    <string name="nav_more_options">More Options</string>
 </resources>
