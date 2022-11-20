@@ -15,17 +15,23 @@ import java.util.Objects;
 
 public class CreditsFragment extends Fragment {
 
-    private RadioGroup rgCreditType;
+    private RadioGroup rgCreditsType;
+
+    public CreditsFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        initComponents();
-        return inflater.inflate(R.layout.fragment_credits, container, false);
+        View view = inflater.inflate(R.layout.fragment_credits, container, false);
+        initComponents(view);
+        return view;
     }
 
-    private void initComponents() {
-        rgCreditType = requireView().findViewById(R.id.rg_credits_type);
+    private void initComponents(View view) {
+        if (getContext() != null) {
+            rgCreditsType = view.findViewById(R.id.rg_credits_type);
+
+        }
 
     }
 }
