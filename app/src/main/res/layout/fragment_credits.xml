@@ -49,5 +49,123 @@
 
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/tv_credits_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/rg_credits_type"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="@string/tv_desired_amount_text"
+        android:textStyle="bold"
+        />
+
+    <SeekBar
+        android:id="@+id/sb_desired_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credits_amount"
+        app:layout_constraintStart_toStartOf="@+id/tv_credits_amount"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="8dp"
+
+        />
+    <TextView
+        android:id="@+id/tv_desired_amount_from_sb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/sb_desired_amount"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="@string/tv_drag_the_seekbar_amount"
+        android:textStyle="bold"
+        />
+
+    <RadioGroup
+        android:id="@+id/rg_interest_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_desired_amount_from_sb"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desired_amount_from_sb">
+
+        <RadioButton
+            android:id="@+id/rg_fixed_interes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/rg_fixed_interest" />
+
+        <RadioButton
+            android:id="@+id/rg_variable_interest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/rg_variable_interest" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_credit_period"
+        android:layout_width="105dp"
+        android:layout_height="28dp"
+        android:text="@string/tv_over_a_period_of"
+        android:textStyle="bold"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_interest_rate" />
+
+    <Spinner
+        android:id="@+id/sp_credit_period"
+        android:layout_width="78dp"
+        android:layout_height="25dp"
+        android:entries="@array/sp_credit_period"
+        android:minHeight="48dp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_credit_period"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_credit_period"
+        app:layout_constraintTop_toBottomOf="@+id/rg_interest_rate" />
+
+    <TextView
+        android:id="@+id/tv_credit_years"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="@string/tv_years"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sp_credit_period"
+        app:layout_constraintTop_toBottomOf="@+id/rg_interest_rate" />
+
+    <TextView
+        android:id="@+id/tv_salary_porting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/tv_collect_salary"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_credit_years"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credit_period"
+        />
+
+    <Switch
+        android:id="@+id/sw_salary_porting"
+        android:layout_width="43dp"
+        android:layout_height="38dp"
+
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toEndOf="@+id/tv_salary_porting"
+        app:layout_constraintTop_toBottomOf="@+id/tv_credit_years" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,4 +7,22 @@
     <string name="tv_credit_rate_calculator">Credit rate calculator</string>
     <string name="rg_credits_personal_loan">Personal loan</string>
     <string name="rg_credits_mortgage_loan">Mortgage loan</string>
+    <string name="tv_desired_amount_text">Desired amount:</string>
+    <string name="tv_drag_the_seekbar_amount">Drag the seekbar until you get the desired amount</string>
+    <string name="rg_fixed_interest">Fixed interest</string>
+    <string name="rg_variable_interest">Variable interest</string>
+    <string name="tv_over_a_period_of">Over a period of:</string>
+    <string name="tv_years">years</string>
+    <string name="tv_collect_salary">Collect the salary through us</string>
+    <string-array name="sp_credit_period">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>9</item>
+        <item>12</item>
+        <item>30</item>
+        <item>35</item>
+    </string-array>
 </resources>
