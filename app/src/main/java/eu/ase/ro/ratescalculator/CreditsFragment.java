@@ -150,17 +150,18 @@ public class CreditsFragment extends Fragment {
     private void getCreditDetails() {
         Log.i("credit details","here we go");
         double interestValue = Double.parseDouble(tv_interest_value.getText().toString());
-        int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
-        double total_payment = (interestValue / 100 + 1) * desiredAmount;
-       // int total_payment = (Integer.parseInt(String.valueOf(tv_interes_value))/100 + 1)
-         //               * Integer.parseInt(tv_desired_amount.getText().toString());
+        if (tv_desired_amount.getText().toString().length() <= 7) {
+            int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
+            double total_payment = (interestValue / 100 + 1) * desiredAmount;
+            // int total_payment = (Integer.parseInt(String.valueOf(tv_interes_value))/100 + 1)
+            //               * Integer.parseInt(tv_desired_amount.getText().toString());
 
-        tv_total_payment_value.setText(String.valueOf(total_payment));
+            tv_total_payment_value.setText(String.valueOf(total_payment));
 
-        int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
-        double firstRate = total_payment / ( period * 12);
+            int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
+            double firstRate = total_payment / ( period * 12);
 
-        tv_first_rate_value.setText(String.valueOf(firstRate));
-
+            tv_first_rate_value.setText(String.valueOf(firstRate));
+        }
     }
 }
