@@ -14,6 +14,10 @@
     <string name="tv_over_a_period_of">Over a period of:</string>
     <string name="tv_years">years</string>
     <string name="tv_collect_salary">Collect the salary through us</string>
+    <string name="tv_first_rate_value">First rate value</string>
+    <string name="tv_total_payment">Total payment</string>
+    <string name="tv_dae">DAE</string>
+    <string name="tv_interest">Interest</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
