@@ -1,12 +1,15 @@
 package eu.ase.ro.ratescalculator;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -60,33 +63,23 @@ public class CreditsFragment extends Fragment {
 
             instantiateSalaryPorting(sw_salary_porting);
 
-
-//            ArrayAdapter<CharSequence> adapter =
-//                    ArrayAdapter.createFromResource(view.getContext(), R.array.sp_credit_period,
-//                    android.R.layout.simple_spinner_item);
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            sp_credit_period.setAdapter(adapter);
-//
-//            sp_credit_period.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                @Override
-//                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                    sp_credit_period.getSelectedItem();
-//                }
-//
-//                @Override
-//                public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                }
-//            });
-
             sb_desired_amount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    tv_desired_amount.setText(String.valueOf(progress * 500));
+                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                        tv_desired_amount.setText(String.valueOf(progress * 1000));
+                    } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan) {
+                        tv_desired_amount.setText(String.valueOf(progress * 4500));
+                    }
                 }
 
                 @Override
                 public void onStartTrackingTouch(SeekBar sb) {
+                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                        tv_desired_amount.setText(String.valueOf(1000));
+                    } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan){
+                        tv_desired_amount.setText(String.valueOf(200000));
+                    }
                 }
 
                 @Override
@@ -95,15 +88,23 @@ public class CreditsFragment extends Fragment {
             });
 
 
-            sw_salary_porting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            sw_salary_porting.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (sw_salary_porting.isChecked()) {
+                    tv_interest_value.setText(String.valueOf(9.99));
+                } else {
+                    tv_interest_value.setText(String.valueOf(11.2));
+                }
+                getCreditDetails();
+            });
+
+            tv_desired_amount.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (sw_salary_porting.isChecked()) {
-                        tv_interest_value.setText(String.valueOf(9.99));
+                public void onClick(View view) {
+                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                        tv_desired_amount.setText(String.valueOf(1000));
                     } else {
-                        tv_interest_value.setText(String.valueOf(11.2));
+                        tv_desired_amount.setText(String.valueOf(200000));
                     }
-                    getCreditDetails();
                 }
             });
 
@@ -116,6 +117,22 @@ public class CreditsFragment extends Fragment {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
+//                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+//                        if (Integer.parseInt(tv_desired_amount.getText().toString()) > 100000) {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder( getContext());
+//                            builder.setMessage(
+//                                    getString(R.string.maximum_amount_to_be_borrowed,
+//                                            "Personal loan", "100.000" ));
+//                            builder.setTitle("Amount credit limit");
+//                            builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
+//                                // If user click no then dialog box is canceled.
+//                                dialog.cancel();
+//                            });
+//                            AlertDialog alertDialog = builder.create();
+//                            alertDialog.show();;
+//                        }
+//                    }
+
                     getCreditDetails();
                 }
             });
@@ -124,6 +141,8 @@ public class CreditsFragment extends Fragment {
             sp_credit_period.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
+
                     getCreditDetails();
                 }
 
@@ -132,11 +151,7 @@ public class CreditsFragment extends Fragment {
 
                 }
             });
-
-
         }
-
-
     }
 
     private void instantiateSalaryPorting(Switch sw_salary_porting) {
@@ -149,19 +164,66 @@ public class CreditsFragment extends Fragment {
 
     private void getCreditDetails() {
         Log.i("credit details","here we go");
-        double interestValue = Double.parseDouble(tv_interest_value.getText().toString());
-        if (tv_desired_amount.getText().toString().length() <= 7) {
-            int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
-            double total_payment = (interestValue / 100 + 1) * desiredAmount;
-            // int total_payment = (Integer.parseInt(String.valueOf(tv_interes_value))/100 + 1)
-            //               * Integer.parseInt(tv_desired_amount.getText().toString());
+        if ( creditAmountIsValid()) {
+            double interestValue = Double.parseDouble(tv_interest_value.getText().toString());
+            if ((tv_desired_amount.getText().toString().length()) != 0) {
+                int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
+                double total_payment = (interestValue / 100 + 1) * desiredAmount;
+                // int total_payment = (Integer.parseInt(String.valueOf(tv_interes_value))/100 + 1)
+                //               * Integer.parseInt(tv_desired_amount.getText().toString());
 
-            tv_total_payment_value.setText(String.valueOf(total_payment));
+                tv_total_payment_value.setText(String.valueOf(total_payment));
 
-            int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
-            double firstRate = total_payment / ( period * 12);
+                int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
+                double firstRate = total_payment / ( period * 12);
 
-            tv_first_rate_value.setText(String.valueOf(firstRate));
+                tv_first_rate_value.setText(String.valueOf(firstRate));
+            }
         }
+
+    }
+
+    private boolean creditAmountIsValid() {
+        if ((tv_desired_amount.getText().toString().length()) != 0) {
+            if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                if (
+                        (Integer.parseInt(tv_desired_amount.getText().toString()) > 100000)
+                        || (Integer.parseInt(tv_desired_amount.getText().toString()) < 1000)
+                ){
+                    generateAlertDialog(R.string.amount_to_be_borrowed,
+                            "Personal loan", "1000", "100.000", "Amount personal loan limit");
+                    tv_desired_amount.setText(String.valueOf(100000));
+                    return false;
+                }
+            } else if (
+                    rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan
+                    ) {
+                    if (
+                            (Integer.parseInt(tv_desired_amount.getText().toString()) > 450000)
+                            || (Integer.parseInt(tv_desired_amount.getText().toString()) < 200000)
+                    ){
+                        generateAlertDialog(R.string.amount_to_be_borrowed,
+                                "Mortgage loan", "200.000", "450.000", "Amount mortgage loan limit");
+                        tv_desired_amount.setText(String.valueOf(450000));
+                        return false;
+                    }
+                }
+            }
+
+        return true;
+    }
+
+    private void generateAlertDialog(int stringResId, String arg1, String arg2, String arg3, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder( getContext());
+        builder.setMessage(
+                getString(stringResId,
+                        arg1, arg2, arg3 ));
+        builder.setTitle(title);
+        builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
+            // If user click no then dialog box is canceled.
+            dialog.cancel();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();;
     }
 }
