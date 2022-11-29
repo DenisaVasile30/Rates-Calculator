@@ -20,6 +20,7 @@
     <string name="tv_interest">Interest</string>
     <string name="hint_drag_the_seekbar">Drag the seekbar until you get the desired amount</string>
     <string name="amount_to_be_borrowed">The amount that can be borrowed for %1$s is between the equivalent of %2$s and %3$s RON</string>
+    <string name="btn_get_offer">Get the offer</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
