@@ -1,16 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/design_default_color_on_secondary">
+    android:background="@color/cardview_shadow_start_color"
+    tools:context=".DepositsFragment"
+
+    >
 
     <TextView
+        android:id="@+id/tv_deposits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/tv_deposit_calculator"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Deposits Fragment"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_deposit_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/tv_deposited_amount"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_deposits" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tv_deposit_amount_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_deposit_amount"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintLeft_toRightOf="@+id/tv_deposit_amount"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_deposit_amount"
+        app:layout_constraintVertical_bias="0.461" />
+
+    <TextView
+        android:id="@+id/tv_deposit_period"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/tv_deposit_duration"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_deposit_amount"
+        app:layout_constraintTop_toBottomOf="@+id/tv_deposit_amount" />
+
+    <Spinner
+        android:id="@+id/sp_deposit_period"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/sp_deposit_period"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_deposit_period"
+        app:layout_constraintLeft_toRightOf="@+id/tv_deposit_period"
+
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_deposit_period"
+        app:layout_constraintTop_toTopOf="@+id/tv_deposit_period"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_interest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/tv_interest"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_deposit_period"
+        app:layout_constraintTop_toBottomOf="@+id/tv_deposit_period" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tv_interest_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_interest"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintLeft_toRightOf="@+id/tv_interest"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_interest"
+        app:layout_constraintVertical_bias="0.423" />
+
+    <TextView
+        android:id="@+id/tv_extension"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/tv_extension"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_interest"
+        app:layout_constraintTop_toBottomOf="@+id/tv_interest" />
+
+
+    <Switch
+        android:id="@+id/sw_extension"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_extension"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_extension"
+        app:layout_constraintTop_toTopOf="@+id/tv_extension"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,10 +17,14 @@
     <string name="tv_first_rate_value">First rate value</string>
     <string name="tv_total_payment">Total payment</string>
     <string name="tv_dae">DAE</string>
-    <string name="tv_interest">Interest</string>
+    <string name="tv_interest">Interest rate </string>
     <string name="hint_drag_the_seekbar">Drag the seekbar until you get the desired amount</string>
     <string name="amount_to_be_borrowed">The amount that can be borrowed for %1$s is between the equivalent of %2$s and %3$s RON</string>
     <string name="btn_get_offer">Get the offer</string>
+    <string name="tv_deposit_calculator">Deposit calculator</string>
+    <string name="tv_deposited_amount">Deposited amount:</string>
+    <string name="tv_deposit_duration">Deposit duration:</string>
+    <string name="tv_extension">Automatic extension at maturity?</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
@@ -31,5 +35,21 @@
         <item>12</item>
         <item>30</item>
         <item>35</item>
+    </string-array>
+    <string-array name="sp_deposit_period">
+        <item>1 luna</item>
+        <item>2 luni</item>
+        <item>3 luni</item>
+        <item>4 luni</item>
+        <item>5 luni</item>
+        <item>6 luni</item>
+        <item>7 luni</item>
+        <item>8 luni</item>
+        <item>9 luni</item>
+        <item>12 luni</item>
+        <item>18 luni</item>
+        <item>24 luni</item>
+        <item>36 luni</item>
+        <item>60 luni</item>
     </string-array>
 </resources>
