@@ -25,6 +25,16 @@
     <string name="tv_deposited_amount">Deposited amount:</string>
     <string name="tv_deposit_duration">Deposit duration:</string>
     <string name="tv_extension">Automatic extension at maturity?</string>
+    <string name="btn_calculate">Calculate</string>
+    <string name="tv_the_amount_saved">The amount saved</string>
+    <string name="tv_deposited_amount_value">Deposited amount:</string>
+    <string name="tv_interest_rate">Interest rate</string>
+    <string name="tv_interest_tax">Interest tax:</string>
+    <string name="tv_period">Period:</string>
+    <string name="tv_earnings">Earnings:</string>
+    <string name="tv_accumulated_amount">Accumulated amount:</string>
+    <string name="value_100">100</string>
+    <string name="default_interest">0.25</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
