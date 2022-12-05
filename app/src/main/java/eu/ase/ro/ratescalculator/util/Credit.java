@@ -1,6 +1,9 @@
 package eu.ase.ro.ratescalculator.util;
 
-public class Credit {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Credit implements Parcelable {
     String loanType;
     int desiredAmount;
     int period;
@@ -19,6 +22,28 @@ public class Credit {
         this.firstRateValue = firstRateValue;
         this.totalPaymentValue = totalPaymentValue;
     }
+
+    protected Credit(Parcel in) {
+        loanType = in.readString();
+        desiredAmount = in.readInt();
+        period = in.readInt();
+        collectSalary = in.readByte() != 0;
+        interestValue = in.readFloat();
+        firstRateValue = in.readFloat();
+        totalPaymentValue = in.readFloat();
+    }
+
+    public static final Creator<Credit> CREATOR = new Creator<Credit>() {
+        @Override
+        public Credit createFromParcel(Parcel in) {
+            return new Credit(in);
+        }
+
+        @Override
+        public Credit[] newArray(int size) {
+            return new Credit[size];
+        }
+    };
 
     public String getLoanType() {
         return loanType;
@@ -78,14 +103,29 @@ public class Credit {
 
     @Override
     public String toString() {
-        return "Credit{" +
-                "loanType='" + loanType + '\'' +
-                ", desiredAmount=" + desiredAmount +
-                ", period=" + period +
-                ", collectSalary=" + collectSalary +
-                ", interestValue=" + interestValue +
-                ", firstRateValue=" + firstRateValue +
-                ", totalPaymentValue=" + totalPaymentValue +
-                '}';
+        return ("Credit details: \n" +
+                "\nLoan Type => " + loanType +
+                "\nDesired Amount => " + desiredAmount +
+                "\n Period => " + period +
+                "\n Collect Salary => " + collectSalary +
+                "\n Interest Percent => " + interestValue +
+                "\n First Rate Value => " + firstRateValue +
+                "\n Total Payment Value => " + totalPaymentValue);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(loanType);
+        parcel.writeInt(desiredAmount);
+        parcel.writeInt(period);
+        parcel.writeByte((byte) (collectSalary ? 1 : 0));
+        parcel.writeFloat(interestValue);
+        parcel.writeFloat(firstRateValue);
+        parcel.writeFloat(totalPaymentValue);
     }
 }

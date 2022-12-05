@@ -3,17 +3,16 @@ package eu.ase.ro.ratescalculator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -24,7 +23,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import eu.ase.ro.ratescalculator.util.Credit;
 
@@ -154,6 +155,20 @@ public class CreditsFragment extends Fragment {
                     Toast.makeText(getContext().getApplicationContext(),
                             credit.toString(),
                             Toast.LENGTH_LONG).show();
+
+//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                    Fragment fragment = new DataFillFragment();
+//                    activity.getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.fragment_container,
+//                                    fragment).addToBackStack(null).commit();
+                    DataFillFragment fragment = new DataFillFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("creditDetails", credit);
+                    fragment.setArguments(bundle);
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
                 }
             }
         };

@@ -20,6 +20,7 @@
     <string name="tv_interest">Interest rate </string>
     <string name="hint_drag_the_seekbar">Drag the seekbar until you get the desired amount</string>
     <string name="amount_to_be_borrowed">The amount that can be borrowed for %1$s is between the equivalent of %2$s and %3$s RON</string>
+    <string name="invalid_field">The %1$s field does not contain valid data!</string>
     <string name="btn_get_offer">Get the offer</string>
     <string name="tv_deposit_calculator">Deposit calculator</string>
     <string name="tv_deposited_amount">Deposited amount:</string>
@@ -35,6 +36,13 @@
     <string name="tv_accumulated_amount">Accumulated amount:</string>
     <string name="value_100">100</string>
     <string name="default_interest">0.25</string>
+    <string name="tv_last_step">Last step</string>
+    <string name="tv_complete_fields">Please complete the following field in order to submit your application</string>
+    <string name="tv_first_name">First name</string>
+    <string name="tv_last_name">Last name</string>
+    <string name="tv_phone_number">Phone number</string>
+    <string name="e_mail">E-mail</string>
+    <string name="tv_choose_the_date">Choose the date when you want to be contacted</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
