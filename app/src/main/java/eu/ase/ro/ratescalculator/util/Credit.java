@@ -103,14 +103,14 @@ public class Credit implements Parcelable {
 
     @Override
     public String toString() {
-        return ("Credit details: \n" +
+        return ("Credit details: " +
                 "\nLoan Type => " + loanType +
                 "\nDesired Amount => " + desiredAmount +
-                "\n Period => " + period +
-                "\n Collect Salary => " + collectSalary +
-                "\n Interest Percent => " + interestValue +
-                "\n First Rate Value => " + firstRateValue +
-                "\n Total Payment Value => " + totalPaymentValue);
+                "\nPeriod => " + period +
+                "\nCollect Salary => " + collectSalary +
+                "\nInterest Percent => " + interestValue +
+                "\nFirst Rate Value => " + firstRateValue +
+                "\nTotal Payment Value => " + totalPaymentValue);
     }
 
     @Override

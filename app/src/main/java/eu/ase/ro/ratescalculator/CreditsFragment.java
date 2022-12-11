@@ -24,8 +24,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.security.acl.Group;
+import java.text.DecimalFormat;
 
 import eu.ase.ro.ratescalculator.util.Credit;
 
@@ -42,6 +46,7 @@ public class CreditsFragment extends Fragment {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch sw_salary_porting;
     private Button btnGetOffer;
+    private ConstraintLayout constraint_group;
 
     public CreditsFragment() {}
 
@@ -65,6 +70,7 @@ public class CreditsFragment extends Fragment {
             tv_interest_value = view.findViewById(R.id.tv_interest_value);
             sb_desired_amount = view.findViewById(R.id.sb_desired_amount);
             btnGetOffer = view.findViewById(R.id.btn_get_offer);
+            constraint_group = view.findViewById(R.id.constraint_group);
 
 
             instantiateSalaryPorting(sw_salary_porting);
@@ -125,7 +131,9 @@ public class CreditsFragment extends Fragment {
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
+
                     getCreditDetails();
+                    constraint_group.setVisibility(getView().VISIBLE);
                 }
             });
             
@@ -149,27 +157,34 @@ public class CreditsFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if (creditAmountIsValid()) {
-                    Credit credit = buildFromComponents();
+                if (tv_desired_amount.getText().toString().length() != 0) {
+                    if (creditAmountIsValid()) {
+                        Credit credit = buildFromComponents();
 
-                    Toast.makeText(getContext().getApplicationContext(),
-                            credit.toString(),
-                            Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext().getApplicationContext(),
+                                credit.toString(),
+                                Toast.LENGTH_LONG).show();
 
 //                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
 //                    Fragment fragment = new DataFillFragment();
 //                    activity.getSupportFragmentManager().beginTransaction()
 //                            .replace(R.id.fragment_container,
 //                                    fragment).addToBackStack(null).commit();
-                    DataFillFragment fragment = new DataFillFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("creditDetails", credit);
-                    fragment.setArguments(bundle);
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container,
-                                    fragment).addToBackStack(null).commit();
+                        DataFillFragment fragment = new DataFillFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("creditDetails", credit);
+                        fragment.setArguments(bundle);
+                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                        activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container,
+                                        fragment).addToBackStack(null).commit();
+                    }
+                } else {
+                    Toast.makeText(getContext().getApplicationContext(),
+                            R.string.info_get_offer,
+                            Toast.LENGTH_LONG).show();
                 }
+
             }
         };
     }
@@ -200,15 +215,18 @@ public class CreditsFragment extends Fragment {
 
     private void getCreditDetails() {
         Log.i("credit details","here we go");
+        DecimalFormat df = new DecimalFormat("0.00");
         if ( creditAmountIsValid()) {
             double interestValue = Double.parseDouble(tv_interest_value.getText().toString());
             if ((tv_desired_amount.getText().toString().length()) != 0) {
                 int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
                 double total_payment = (interestValue / 100 + 1) * desiredAmount;
+                total_payment = Double.parseDouble(df.format(total_payment));
                 tv_total_payment_value.setText(String.valueOf(total_payment));
 
                 int period = Integer.parseInt(String.valueOf(sp_credit_period.getSelectedItem()));
                 double firstRate = total_payment / ( period * 12);
+                firstRate = Double.parseDouble(df.format(firstRate));
 
                 tv_first_rate_value.setText(String.valueOf(firstRate));
             }
