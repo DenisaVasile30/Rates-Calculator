@@ -1,6 +1,8 @@
 package eu.ase.ro.ratescalculator;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,15 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import eu.ase.ro.ratescalculator.util.Credit;
+import java.text.DecimalFormat;
+
 import eu.ase.ro.ratescalculator.util.Deposit;
 
 public class DepositsFragment extends Fragment {
@@ -35,6 +38,8 @@ public class DepositsFragment extends Fragment {
     private TextView tv_period_value;
     private TextView tv_earnings_value;
     private TextView tv_accumulated_value;
+    private ConstraintLayout constraint_group_depo;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     public DepositsFragment(){}
 
@@ -52,9 +57,15 @@ public class DepositsFragment extends Fragment {
             initDepositValue(view);
             initSpnPeriod(view);
             initInterestValue(view);
-            btn_calculate = view.findViewById(R.id.btn_calculate);
-            btn_calculate.setOnClickListener(generateDepositValues());
+            constraint_group_depo = view.findViewById(R.id.constraint_group_depo);
+            initBtnCalculate(view);
+
         }
+    }
+
+    private void initBtnCalculate(View view) {
+        btn_calculate = view.findViewById(R.id.btn_calculate);
+        btn_calculate.setOnClickListener(generateDepositValues());
     }
 
     private View.OnClickListener generateDepositValues() {
@@ -62,10 +73,14 @@ public class DepositsFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Deposit deposit = initDatas();
-                Toast.makeText(getContext().getApplicationContext(),
-                        deposit.toString(),
-                        Toast.LENGTH_LONG).show();
+                btn_calculate.requestFocus();
+                if (isValidAmount() && isValidInterest()) {
+                    Deposit deposit = initDatas();
+                    Toast.makeText(getContext().getApplicationContext(),
+                            deposit.toString(),
+                            Toast.LENGTH_LONG).show();
+                    constraint_group_depo.setVisibility(view.VISIBLE);
+                }
             }
 
             private Deposit initDatas() {
@@ -90,15 +105,19 @@ public class DepositsFragment extends Fragment {
                             * days * interestRate)
                             / (360 * 100);
                 Log.i("dobanda calculata: ", String.valueOf(calculatedInterest));
+                calculatedInterest = Float.parseFloat(df.format(calculatedInterest));
                 tv_interest_rate_value.setText(String.valueOf(calculatedInterest));
 
                 float interestTax = (float) (0.1 * calculatedInterest);
+                interestTax = Float.parseFloat(df.format(interestTax));
                 tv_interest_tax_value.setText(String.valueOf(interestTax));
 
                 float earnings = calculatedInterest - interestTax;
+                earnings = Float.parseFloat(df.format(earnings));
                 tv_earnings_value.setText(String.valueOf(earnings));
 
                 float accumulatedValue = depositedValue + earnings;
+                accumulatedValue = Float.parseFloat(df.format(accumulatedValue));
                 tv_accumulated_value.setText(String.valueOf(accumulatedValue));
 
                 return new Deposit(depositedValue, days, interestRate, interestTax,
@@ -109,22 +128,23 @@ public class DepositsFragment extends Fragment {
 
     private void initInterestValue(View view) {
         tv_interest_value = view.findViewById(R.id.tv_interest_value);
+        tv_interest_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!tv_interest_value.hasFocus() && !tv_interest_value.getText().toString().equals("")) {
+                    isValidInterest();
+                }
+            }
+        });
         tv_interest_value.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {                
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if ( tv_interest_value.getText().toString().length() == 0) {
-                    tv_interest_value.setText(R.string.default_interest);
-                }
-                double interestValue = Float.parseFloat(tv_interest_value.getText().toString());
-                if (!(interestValue != 0)) {
-                    Toast.makeText(view.getContext().getApplicationContext(),
-                            "The interest rate can not be zero!",
-                            Toast.LENGTH_LONG).show();
-                    tv_interest_value.setText(R.string.default_interest);
+                if (tv_interest_value.getText().toString().length() >= 2) {
+                    sp_deposit_period.requestFocus();
                 }
             }
 
@@ -132,6 +152,21 @@ public class DepositsFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
             }
         });
+    }
+
+    private boolean isValidInterest() {
+        tv_deposit_amount_value.requestFocus();
+        if (!tv_interest_value.hasFocus() && !tv_interest_value.getText().toString().equals("")) {
+            double interestValue = Float.parseFloat(tv_interest_value.getText().toString());
+            interestValue = Double.parseDouble(df.format(interestValue));
+            if (interestValue != 0) {
+                return true;
+            }
+        }
+        generateAlertDialog(R.string.info_complete_interest, "Invalid amount");
+        tv_interest_value.setText(R.string.default_interest);
+
+        return false;
     }
 
     private void initSpnPeriod(View view) {
@@ -140,45 +175,40 @@ public class DepositsFragment extends Fragment {
 
     private void initDepositValue(View view) {
         tv_deposit_amount_value = view.findViewById(R.id.tv_deposit_amount_value);
-        tv_deposit_amount_value.addTextChangedListener(new TextWatcher() {
+        tv_deposit_amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if ( tv_deposit_amount_value.getText().toString().length() == 0) {
-                    tv_deposit_amount_value.setText(R.string.value_100);
+            public void onFocusChange(View view, boolean b) {
+                if (!tv_deposit_amount_value.hasFocus() && !tv_deposit_amount_value.getText().toString().equals("")) {
+                    isValidAmount();
                 }
-                int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
-                if (depositedValue > 100000) {
-                    Toast.makeText(view.getContext().getApplicationContext(),
-                            "Deposited value must be an integer less than 100.000",
-                            Toast.LENGTH_LONG).show();
-                    tv_deposit_amount_value.setText(R.string.value_100);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
             }
         });
-//        tv_deposit_amount_value.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                try {
-//                    int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
-//                    if (!( depositedValue > 0 && depositedValue <= 100000)) {
-//                        Toast.makeText(view.getContext().getApplicationContext(),
-//                                "Deposited value must be an integer less than 100.000",
-//                                Toast.LENGTH_LONG).show();
-//                    }
-//                } catch (Exception ex){
-//                    Toast.makeText(view.getContext().getApplicationContext(),
-//                            "Deposited value must be an integer less than 100.000",
-//                            Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
+    }
+
+    private boolean isValidAmount() {
+        tv_interest_value.requestFocus();
+        if ( !((tv_deposit_amount_value.getText().toString()).trim()).equals("")) {
+            int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
+            if (depositedValue <= 100000) {
+                return true;
+            }
+        }
+        generateAlertDialog(R.string.info_maximum_depo, "Invalid amount");
+        tv_deposit_amount_value.setText("");
+
+        return false;
+    }
+
+    private void generateAlertDialog(int stringResId, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder( getContext());
+        builder.setMessage(
+                getString(stringResId));
+        builder.setTitle(title);
+        builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
+            // If user click no then dialog box is canceled.
+            dialog.cancel();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();;
     }
 }

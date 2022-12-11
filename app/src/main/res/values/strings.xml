@@ -42,6 +42,8 @@
     <string name="e_mail">E-mail</string>
     <string name="tv_choose_the_date">Choose the date when you want to be contacted</string>
     <string name="info_get_offer">You must insert the desired amount in order to get an offer!</string>
+    <string name="info_maximum_depo">Maximum amount that can be deposited is 100.000 RON</string>
+    <string name="info_complete_interest">The interest rate must be completed</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_submit">Submit</string>
     <string-array name="sp_credit_period">
