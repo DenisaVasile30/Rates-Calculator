@@ -3,7 +3,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_credits">Credits</string>
     <string name="nav_deposits">Deposits</string>
-    <string name="nav_more_options">More Options</string>
+    <string name="nav_my_applications">My applications</string>
     <string name="tv_credit_rate_calculator">Credit rate calculator</string>
     <string name="rg_credits_personal_loan">Personal loan</string>
     <string name="rg_credits_mortgage_loan">Mortgage loan</string>
@@ -46,6 +46,8 @@
     <string name="info_complete_interest">The interest rate must be completed</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_submit">Submit</string>
+    <string name="tv_active_applications">Active applications</string>
+    <string name="tv_empty_val">-</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

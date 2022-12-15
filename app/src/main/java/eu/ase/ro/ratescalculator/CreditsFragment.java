@@ -165,11 +165,6 @@ public class CreditsFragment extends Fragment {
                                 credit.toString(),
                                 Toast.LENGTH_LONG).show();
 
-//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                    Fragment fragment = new DataFillFragment();
-//                    activity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragment_container,
-//                                    fragment).addToBackStack(null).commit();
                         DataFillFragment fragment = new DataFillFragment();
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("creditDetails", credit);

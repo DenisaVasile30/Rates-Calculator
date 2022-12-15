@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_deposits:
                             selectedFragment = new DepositsFragment();
                             break;
-                        case R.id.nav_more_options:
-                            selectedFragment = new MoreOptionsFragment();
+                        case R.id.nav_my_applications:
+                            selectedFragment = new MyApplicationFragment();
                             break;
                     }
 

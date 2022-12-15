@@ -17,7 +17,7 @@
         android:title="@string/nav_deposits"/>
 
     <item
-        android:id="@+id/nav_more_options"
-        android:icon="@drawable/ic_baseline_more_options"
-        android:title="@string/nav_more_options"/>
+        android:id="@+id/nav_my_applications"
+        android:icon="@drawable/ic_baseline_my_applications"
+        android:title="@string/nav_my_applications"/>
 </menu>
