@@ -48,7 +48,7 @@ public class MyApplicationFragment extends Fragment {
             SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
 
             Log.i("ReceivedDataFilled555: ", receivedDataFilled.toString());
-            //initLv(view, receivedDataFilled);
+            initLv(view, receivedDataFilled);
 
         }
 
@@ -65,7 +65,7 @@ public class MyApplicationFragment extends Fragment {
                     submitedDataList, getLayoutInflater());
             lv_applications.setAdapter(adapter);
 
-            notifyAdapter();
+            adapter.notifyAdapter(lv_applications);
         }
     }
     private void notifyAdapter() {

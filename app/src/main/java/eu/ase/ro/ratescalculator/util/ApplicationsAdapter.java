@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.ase.ro.ratescalculator.R;
 
@@ -64,6 +63,7 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         if (submitedData == null) {
             return view;
         }
+        Log.i("total:", String.valueOf(submitedDataList.size()));
         addSubmitedName(view, submitedDataList.get(0).getFirstName(),
                 submitedDataList.get(0).getLastName());
 
@@ -78,5 +78,10 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         } else {
             textView.setText(R.string.tv_empty_val);
         }
+    }
+
+    public void notifyAdapter(ListView lv_applications) {
+        ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
+        adapter.notifyDataSetChanged();
     }
 }

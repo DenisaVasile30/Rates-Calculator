@@ -96,28 +96,28 @@ public class DataFillFragment extends Fragment {
             initDatePicker(view);
             initCancelButton(view);
             initSubmitButton(view, receivedCredit);
-            initAdapter(inflater, container);
+
 
 
 
         }
     }
 
-    private void initAdapter(LayoutInflater inflater, ViewGroup container) {
-
-        View view = inflater.inflate(R.layout.fragment_my_applications, container, false);
-        lv_applications =  (ListView) view.findViewById(R.id.lv_applications);
-        Object[] obj = null;
-        SubmitedData submitedData = new SubmitedData("firstName", "lastName",
-                "07xxxxxxxx", "emal@email.com", "10/10/2022",
-                obj);
-        submitedDataList.add(submitedData);
-        ApplicationsAdapter adapter = new ApplicationsAdapter(
-                view.getContext(),
-                R.layout.fragment_my_applications,
-                submitedDataList, getLayoutInflater());
-        lv_applications.setAdapter(adapter);
-    }
+//    private void initAdapter(LayoutInflater inflater, ViewGroup container) {
+//
+//        View view = inflater.inflate(R.layout.fragment_my_applications, container, false);
+//        lv_applications =  (ListView) view.findViewById(R.id.lv_applications);
+//        Object[] obj = null;
+//        SubmitedData submitedData = new SubmitedData("firstName", "lastName",
+//                "07xxxxxxxx", "emal@email.com", "10/10/2022",
+//                obj);
+//        submitedDataList.add(submitedData);
+//        ApplicationsAdapter adapter = new ApplicationsAdapter(
+//                view.getContext(),
+//                R.layout.fragment_my_applications,
+//                submitedDataList, getLayoutInflater());
+//        lv_applications.setAdapter(adapter);
+//    }
 
 // varianta ok
 //    private void initSubmitButton(View view, Credit receivedCredit) {
@@ -164,7 +164,6 @@ public class DataFillFragment extends Fragment {
                     submitedDataList.add(receivedDataFilled);
                     // initLv(view,submitedData);
 
-                    notifyAdapter();
                     Toast.makeText(getContext().getApplicationContext(),
                             submitedData.toString(),
                             Toast.LENGTH_LONG).show();
