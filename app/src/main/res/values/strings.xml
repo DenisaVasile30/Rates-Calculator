@@ -48,6 +48,8 @@
     <string name="btn_submit">Submit</string>
     <string name="tv_active_applications">Active applications</string>
     <string name="tv_empty_val">-</string>
+    <string name="ct_bank_picture">Bank picture</string>
+    <string name="active_applications">Active applications</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

@@ -53,6 +53,8 @@ public class CreditsFragment extends Fragment {
 
     public CreditsFragment() {}
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -185,6 +187,7 @@ public class CreditsFragment extends Fragment {
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container,
                                         fragment).addToBackStack(null).commit();
+
 
 
                     }

@@ -35,13 +35,8 @@ public class MyApplicationFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
-          //  Log.i("ReceivedDataFilled555: ", receivedDataFilled.toString());
             submitedDataList = bundle.getParcelableArrayList("submitedDataList");
             Log.i("list size on create:", String.valueOf(submitedDataList.size()));
-//            Intent intent = new Intent(getActivity(), MainActivity.class);
-//            intent.putParcelableArrayListExtra("submitedDataList", submitedDataList);
-//            startActivity(intent);
-
         }
     }
 
@@ -49,10 +44,8 @@ public class MyApplicationFragment extends Fragment {
         MyApplicationFragment fragment = new MyApplicationFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList("submitedDataList", submitedDataList);
-
         fragment.setArguments(args);
         Log.i("list size new instance:", String.valueOf(submitedDataList.size()));
-
         return fragment;
     }
 
@@ -62,17 +55,8 @@ public class MyApplicationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_applications, container, false);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-           // SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
-           // submitedDataList = bundle.getParcelableArrayList("submitedDataList");
-          //  Log.i("ReceivedDataFilled555: ", receivedDataFilled.toString());
-           // Log.i("list size:", String.valueOf(submitedDataList.size()));
-
-            //initLv(view, receivedDataFilled);
             initLV(view, submitedDataList);
 
-//            Intent intent = new Intent(getActivity(), MainActivity.class);
-//            intent.putParcelableArrayListExtra("submitedDataList", submitedDataList);
-            //startActivity(intent);
             Log.i("putExtraIntent:", String.valueOf(submitedDataList.size()));
         }
 
@@ -83,30 +67,22 @@ public class MyApplicationFragment extends Fragment {
 
         if (getContext() != null) {
             lv_applications = view.findViewById(R.id.lv_applications);
-            ApplicationsAdapter adapter = new ApplicationsAdapter(
-                    getContext(),
-                    R.layout.listview_applications,
-                    this.submitedDataList, getLayoutInflater());
-            lv_applications.setAdapter(adapter);
-
-            adapter.notifyAdapter(lv_applications);
-        }
-    }
-
-//    private void initLv(View view, SubmitedData receivedDataFilled) {
-//        Log.i("list size initLV:", String.valueOf(submitedDataList.size()));
-//        submitedDataList.add(receivedDataFilled);
-//        if (getContext() != null) {
-//            lv_applications = view.findViewById(R.id.lv_applications);
 //            ApplicationsAdapter adapter = new ApplicationsAdapter(
 //                    getContext(),
 //                    R.layout.listview_applications,
-//                    submitedDataList, getLayoutInflater());
+//                    this.submitedDataList, getLayoutInflater());
 //            lv_applications.setAdapter(adapter);
-//
-//            notifyAdapter();
-//        }
-//    }
+
+            ApplicationsAdapter adapter = new ApplicationsAdapter(
+                    getContext(),
+                    R.layout.listview_applications,
+                    this.submitedDataList);
+            lv_applications.setAdapter(adapter);
+
+            //adapter.notifyAdapter(lv_applications);
+        }
+    }
+
     private void notifyAdapter() {
         ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
         adapter.notifyDataSetChanged();

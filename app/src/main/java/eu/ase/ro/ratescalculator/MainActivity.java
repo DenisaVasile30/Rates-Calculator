@@ -1,5 +1,9 @@
 package eu.ase.ro.ratescalculator;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -16,9 +20,19 @@ import java.util.List;
 
 import eu.ase.ro.ratescalculator.util.SubmitedData;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataFillFragment.sendData {
 
     private ArrayList<SubmitedData> submitedDataList = new ArrayList<>();
+//    private ActivityResultLauncher<Intent> submitedDataLauncher;
+//
+//    private ActivityResultCallback<ActivityResult> getSubmitedDataActivityResultCallback(){
+//        return new ActivityResultCallback<ActivityResult>() {
+//            @Override
+//            public void onActivityResult(ActivityResult result) {
+//                // info din submit data
+//            }
+//        };
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +40,19 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+//        submitedDataLauncher = registerSubmitedDataLauncher();
+
         NavigationBarView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
     }
+
+//    private ActivityResultLauncher<Intent> registerSubmitedDataLauncher() {
+//        ActivityResultCallback<ActivityResult> callback = getSubmitedDataActivityResultCallback();
+//        return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
+//    }
 
     private NavigationBarView.OnItemSelectedListener navListener =
             new NavigationBarView.OnItemSelectedListener() {
@@ -62,5 +83,9 @@ public class MainActivity extends AppCompatActivity {
             };
 
 
-
+    @Override
+    public void sendFilledData(ArrayList<SubmitedData> submitedDataList) {
+        Log.i("anterior size", String.valueOf(submitedDataList.size()));
+        this.submitedDataList.addAll(submitedDataList);
+    }
 }
