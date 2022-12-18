@@ -1,5 +1,6 @@
 package eu.ase.ro.ratescalculator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -57,12 +59,40 @@ public class DataFillFragment extends Fragment {
     private ListView lv_applications;
     private ArrayList<SubmitedData>  submitedDataList;
 
+
+    private ActivityResultLauncher<Intent> submitedDataLauncher;
+
+    private ActivityResultCallback<ActivityResult> getSubmitedDataActivityResultCallback(){
+        return new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                // info din submit data
+            }
+        };
+    }
+
     public DataFillFragment() {}
+
+    public interface sendData {
+        public void sendFilledData(ArrayList<SubmitedData> submitedDataList);
+    }
+
+    sendData dataToSend;
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        try {
+            dataToSend = (sendData) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement sendData");
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        submitedDataLauncher = registerSubmitedDataLauncher();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Credit receivedCredit = bundle.getParcelable("creditDetails");
@@ -70,6 +100,11 @@ public class DataFillFragment extends Fragment {
             Log.i("creditDetailsReceived: ", receivedCredit.toString());
         }
 
+    }
+
+    private ActivityResultLauncher<Intent> registerSubmitedDataLauncher() {
+        ActivityResultCallback<ActivityResult> callback = getSubmitedDataActivityResultCallback();
+        return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
     }
 
     @Nullable
@@ -118,21 +153,6 @@ public class DataFillFragment extends Fragment {
         }
     }
 
-    private void initAdapter(LayoutInflater inflater, ViewGroup container) {
-
-        View view = inflater.inflate(R.layout.fragment_my_applications, container, false);
-        lv_applications =  (ListView) view.findViewById(R.id.lv_applications);
-        Object[] obj = null;
-        SubmitedData submitedData = new SubmitedData("firstName", "lastName",
-                "07xxxxxxxx", "emal@email.com", "10/10/2022",
-                obj);
-        submitedDataList.add(submitedData);
-        ApplicationsAdapter adapter = new ApplicationsAdapter(
-                view.getContext(),
-                R.layout.fragment_my_applications,
-                submitedDataList, getLayoutInflater());
-        lv_applications.setAdapter(adapter);
-    }
 
     private void initSubmitButton(View view, Credit receivedCredit) {
         btn_Sumbit = view.findViewById(R.id.btn_submit);
@@ -157,17 +177,20 @@ public class DataFillFragment extends Fragment {
                     Toast.makeText(getContext().getApplicationContext(),
                             submitedData.toString(),
                             Toast.LENGTH_LONG).show();
-                    Log.i("newObjectCreated:", submitedData.toString());
 
+                    //ok
+//                    Log.i("newObjectCreated:", submitedData.toString());
+//
+//
+//                    MyApplicationFragment fragment = MyApplicationFragment.newInstance(submitedDataList);
+//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//
+//                    activity.getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.fragment_container,
+//                                    fragment).addToBackStack(null).commit();
+                    //ok
 
-                    MyApplicationFragment fragment = MyApplicationFragment.newInstance(submitedDataList);
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-
-                    activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container,
-                                    fragment).addToBackStack(null).commit();
-
-
+                    dataToSend.sendFilledData(submitedDataList);
 
                 }
             }
