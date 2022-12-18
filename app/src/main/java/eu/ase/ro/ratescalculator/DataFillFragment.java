@@ -2,8 +2,10 @@ package eu.ase.ro.ratescalculator;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -50,7 +55,7 @@ public class DataFillFragment extends Fragment {
 
     private SubmitedData receivedDataFilled;
     private ListView lv_applications;
-    private ArrayList<SubmitedData>  submitedDataList = new ArrayList<>();
+    private ArrayList<SubmitedData>  submitedDataList;
 
     public DataFillFragment() {}
 
@@ -64,6 +69,7 @@ public class DataFillFragment extends Fragment {
 
             Log.i("creditDetailsReceived: ", receivedCredit.toString());
         }
+
     }
 
     @Nullable
@@ -82,6 +88,15 @@ public class DataFillFragment extends Fragment {
     }
 
 
+
+    public static DataFillFragment newInstance(ArrayList<SubmitedData>  submitedDataList) {
+        DataFillFragment fragment = new DataFillFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("submitedDataList", submitedDataList);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private void initCreditDetailsView(Credit receivedCredit, View view) {
         tv_credit_details = view.findViewById(R.id.tv_credit_details);
         tv_credit_details.setText(receivedCredit.toString());
@@ -96,7 +111,7 @@ public class DataFillFragment extends Fragment {
             initDatePicker(view);
             initCancelButton(view);
             initSubmitButton(view, receivedCredit);
-            initAdapter(inflater, container);
+           // initAdapter(inflater, container);
 
 
 
@@ -119,40 +134,9 @@ public class DataFillFragment extends Fragment {
         lv_applications.setAdapter(adapter);
     }
 
-// varianta ok
-//    private void initSubmitButton(View view, Credit receivedCredit) {
-//        btn_Sumbit = view.findViewById(R.id.btn_submit);
-//        btn_Sumbit.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.O)
-//            @Override
-//            public void onClick(View view) {
-//                if (checkValidData()) {
-//                    SubmitedData submitedData = buildFromComponents(receivedCredit);
-//
-//                   // initLv(view,submitedData);
-//
-//                    Toast.makeText(getContext().getApplicationContext(),
-//                            submitedData.toString(),
-//                            Toast.LENGTH_LONG).show();
-//                    Log.i("newObjectCreated:", submitedData.toString());
-//
-//                    MyApplicationFragment fragment = new MyApplicationFragment();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putParcelable("dataFilled", submitedData);
-//                    fragment.setArguments(bundle);
-//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                    activity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragment_container,
-//                                    fragment).addToBackStack(null).commit();
-//                }
-//            }
-//        });
-//        // de creat listview si de migrat in fragment nou: my applications
-//    }
-
-    // test
     private void initSubmitButton(View view, Credit receivedCredit) {
         btn_Sumbit = view.findViewById(R.id.btn_submit);
+
 
         btn_Sumbit.setOnClickListener(new View.OnClickListener() {
 
@@ -161,28 +145,37 @@ public class DataFillFragment extends Fragment {
             public void onClick(View view) {
                 if (checkValidData()) {
                     SubmitedData submitedData = buildFromComponents(receivedCredit);
-                    submitedDataList.add(receivedDataFilled);
-                    // initLv(view,submitedData);
+                    if (submitedDataList == null) {
+                        submitedDataList = new ArrayList<>();
+                    }
+                    Log.i("datafillList:", submitedData.toString());
 
-                    notifyAdapter();
+                    submitedDataList.add(submitedData);
+                    Log.i("datafillList:", submitedDataList.get(0).toString());
+                    Log.i("size from datafill: " , String.valueOf(submitedDataList.size()));
+
                     Toast.makeText(getContext().getApplicationContext(),
                             submitedData.toString(),
                             Toast.LENGTH_LONG).show();
                     Log.i("newObjectCreated:", submitedData.toString());
-                    MyApplicationFragment fragment = new MyApplicationFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("dataFilled", submitedData);
-                    fragment.setArguments(bundle);
+
+
+                    MyApplicationFragment fragment = MyApplicationFragment.newInstance(submitedDataList);
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
+
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container,
                                     fragment).addToBackStack(null).commit();
+
+
 
                 }
             }
         });
 
     }
+
+
     private void notifyAdapter() {
         ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
         adapter.notifyDataSetChanged();

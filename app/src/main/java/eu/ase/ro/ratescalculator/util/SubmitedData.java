@@ -14,6 +14,7 @@ public class SubmitedData implements Parcelable {
     private Object[] receivedObject;
 
 
+    public SubmitedData(){}
 
     public SubmitedData(String firstName, String lastName, String phoneNumber,
                         String email, String dateToBeContacted, Object[] receivedObject) {

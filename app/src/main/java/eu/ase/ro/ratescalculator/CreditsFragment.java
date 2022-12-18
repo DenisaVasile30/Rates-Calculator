@@ -30,8 +30,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.security.acl.Group;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import eu.ase.ro.ratescalculator.util.Credit;
+import eu.ase.ro.ratescalculator.util.SubmitedData;
 
 public class CreditsFragment extends Fragment {
 
@@ -47,6 +49,7 @@ public class CreditsFragment extends Fragment {
     private Switch sw_salary_porting;
     private Button btnGetOffer;
     private ConstraintLayout constraint_group;
+    private ArrayList<SubmitedData> submitedDataList;
 
     public CreditsFragment() {}
 
@@ -164,15 +167,26 @@ public class CreditsFragment extends Fragment {
                         Toast.makeText(getContext().getApplicationContext(),
                                 credit.toString(),
                                 Toast.LENGTH_LONG).show();
-
-                        DataFillFragment fragment = new DataFillFragment();
+                        //ok
+//                        DataFillFragment fragment = new DataFillFragment();
+//                        Bundle bundle = new Bundle();
+//                        bundle.putParcelable("creditDetails", credit);
+//                        fragment.setArguments(bundle);
+//                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                        activity.getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.fragment_container,
+//                                        fragment).addToBackStack(null).commit();
+                        //ok
+                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                        Fragment fragment = DataFillFragment.newInstance(submitedDataList);
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("creditDetails", credit);
                         fragment.setArguments(bundle);
-                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container,
                                         fragment).addToBackStack(null).commit();
+
+
                     }
                 } else {
                     Toast.makeText(getContext().getApplicationContext(),
