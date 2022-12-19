@@ -80,50 +80,56 @@ public class DepositsFragment extends Fragment {
                             deposit.toString(),
                             Toast.LENGTH_LONG).show();
                     constraint_group_depo.setVisibility(view.VISIBLE);
+                    resetFilledData();
                 }
             }
-
-            private Deposit initDatas() {
-                tv_deposited_value = getView().findViewById(R.id.tv_deposited_value);
-                tv_deposited_value.setText(tv_deposit_amount_value.getText().toString());
-                int depositedValue = Integer.parseInt(tv_deposited_value.getText().toString());
-
-                tv_period_value = getView().findViewById(R.id.tv_period_value);
-                String period = sp_deposit_period.getSelectedItem().toString();
-                tv_period_value.setText(period);
-                int days = (Integer.parseInt(period.substring(0, period.indexOf(" ")))) * 30;
-
-                tv_interest_rate_value = getView().findViewById(R.id.tv_interest_rate_value);
-               // tv_interest_rate_value.setText(tv_interest_value.getText().toString());
-                float interestRate = Float.parseFloat(tv_interest_value.getText().toString());
-
-                tv_interest_tax_value = getView().findViewById(R.id.tv_interest_tax_value);
-                tv_earnings_value = getView().findViewById(R.id.tv_earnings_value);
-                tv_accumulated_value = getView().findViewById(R.id.tv_accumulated_value);
-
-                float calculatedInterest = (float)(depositedValue
-                            * days * interestRate)
-                            / (360 * 100);
-                Log.i("dobanda calculata: ", String.valueOf(calculatedInterest));
-                calculatedInterest = Float.parseFloat(df.format(calculatedInterest));
-                tv_interest_rate_value.setText(String.valueOf(calculatedInterest));
-
-                float interestTax = (float) (0.1 * calculatedInterest);
-                interestTax = Float.parseFloat(df.format(interestTax));
-                tv_interest_tax_value.setText(String.valueOf(interestTax));
-
-                float earnings = calculatedInterest - interestTax;
-                earnings = Float.parseFloat(df.format(earnings));
-                tv_earnings_value.setText(String.valueOf(earnings));
-
-                float accumulatedValue = depositedValue + earnings;
-                accumulatedValue = Float.parseFloat(df.format(accumulatedValue));
-                tv_accumulated_value.setText(String.valueOf(accumulatedValue));
-
-                return new Deposit(depositedValue, days, interestRate, interestTax,
-                        earnings, accumulatedValue);
-            }
         };
+    }
+
+    private Deposit initDatas() {
+        tv_deposited_value = getView().findViewById(R.id.tv_deposited_value);
+        tv_deposited_value.setText(tv_deposit_amount_value.getText().toString());
+        int depositedValue = Integer.parseInt(tv_deposited_value.getText().toString());
+
+        tv_period_value = getView().findViewById(R.id.tv_period_value);
+        String period = sp_deposit_period.getSelectedItem().toString();
+        tv_period_value.setText(period);
+        int days = (Integer.parseInt(period.substring(0, period.indexOf(" ")))) * 30;
+
+        tv_interest_rate_value = getView().findViewById(R.id.tv_interest_rate_value);
+        // tv_interest_rate_value.setText(tv_interest_value.getText().toString());
+        float interestRate = Float.parseFloat(tv_interest_value.getText().toString());
+
+        tv_interest_tax_value = getView().findViewById(R.id.tv_interest_tax_value);
+        tv_earnings_value = getView().findViewById(R.id.tv_earnings_value);
+        tv_accumulated_value = getView().findViewById(R.id.tv_accumulated_value);
+
+        float calculatedInterest = (float)(depositedValue
+                * days * interestRate)
+                / (360 * 100);
+        Log.i("dobanda calculata: ", String.valueOf(calculatedInterest));
+        calculatedInterest = Float.parseFloat(df.format(calculatedInterest));
+        tv_interest_rate_value.setText(String.valueOf(calculatedInterest));
+
+        float interestTax = (float) (0.1 * calculatedInterest);
+        interestTax = Float.parseFloat(df.format(interestTax));
+        tv_interest_tax_value.setText(String.valueOf(interestTax));
+
+        float earnings = calculatedInterest - interestTax;
+        earnings = Float.parseFloat(df.format(earnings));
+        tv_earnings_value.setText(String.valueOf(earnings));
+
+        float accumulatedValue = depositedValue + earnings;
+        accumulatedValue = Float.parseFloat(df.format(accumulatedValue));
+        tv_accumulated_value.setText(String.valueOf(accumulatedValue));
+
+        return new Deposit(depositedValue, days, interestRate, interestTax,
+                earnings, accumulatedValue);
+    }
+
+    private void resetFilledData() {
+        tv_deposit_amount_value.setText(R.string.empty_string);
+        tv_interest_value.setText(R.string.empty_string);
     }
 
     private void initInterestValue(View view) {
@@ -186,7 +192,6 @@ public class DepositsFragment extends Fragment {
     }
 
     private boolean isValidAmount() {
-        tv_interest_value.requestFocus();
         if ( !((tv_deposit_amount_value.getText().toString()).trim()).equals("")) {
             int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
             if (depositedValue <= 100000) {
