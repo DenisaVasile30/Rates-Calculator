@@ -28,58 +28,18 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
     private LayoutInflater inflater;
     private ArrayList<SubmitedData> submitedDataList;
 
+    public ApplicationsAdapter(@NonNull Context context, int resource,
+                               ArrayList<SubmitedData> submitedDataList) {
+        super(context, resource, submitedDataList);
+        this.context = context;
+        this.resource = resource;
+        this.submitedDataList = new ArrayList<SubmitedData>(submitedDataList);
 
-//    public ApplicationsAdapter(@NonNull Context context, int resource,
-//                               ArrayList<SubmitedData> submitedDataList,
-//                               LayoutInflater inflater) {
-//        super(context, resource, submitedDataList);
-//        this.context = context;
-//        this.resource = resource;
-//        this.submitedDataList = new ArrayList<SubmitedData>(submitedDataList);
-//
-//        Log.i("data list adapteer:", String.valueOf(submitedDataList.size()));
-//        //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
-//        this.inflater = inflater;
-//    }
-        public ApplicationsAdapter(@NonNull Context context, int resource,
-                                   ArrayList<SubmitedData> submitedDataList) {
-            super(context, resource, submitedDataList);
-            this.context = context;
-            this.resource = resource;
-            this.submitedDataList = new ArrayList<SubmitedData>(submitedDataList);
+        Log.i("data list adapteer:", String.valueOf(submitedDataList.size()));
+        //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
 
-            Log.i("data list adapteer:", String.valueOf(submitedDataList.size()));
-            //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
+    }
 
-        }
-
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        View view = inflater.inflate(resource, parent, false);
-//        //SubmitedData submitedData = this.submitedDataList.get(position);
-//        Log.i("getView", "here");
-//        if (submitedDataList == null) {
-//            Log.i("getView===null", "here");
-//
-//            return view;
-//        }
-//        Log.i("position", String.valueOf(position));
-//        Log.i("getView!==null", "here");
-//        Log.i("getIndex", String.valueOf(submitedDataList));
-//
-//       // Log.i("getIndex", submitedDataList.get(0));
-//        for(int i = 0; i < submitedDataList.size(); i++) {
-////            SubmitedData submitedData = submitedDataList.get(position);
-//            SubmitedData submitedData = new SubmitedData();
-//            submitedData.setFirstName((submitedDataList.get(i)).getFirstName());
-//            Log.i("infor:", submitedData.getFirstName());
-//            addSubmitedName(view, (submitedDataList.get(i)).getFirstName(),
-//                    submitedDataList.get(i).getLastName());
-//        }
-//
-//        return view;
-//    }
 
     @NonNull
     @Override

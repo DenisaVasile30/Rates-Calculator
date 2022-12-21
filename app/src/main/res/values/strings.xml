@@ -51,6 +51,10 @@
     <string name="ct_bank_picture">Bank picture</string>
     <string name="active_applications">Active applications</string>
     <string name="empty_string" />
+    <string name="tv_bank_products">Bank products</string>
+    <string name="tv_interest_interval">Interest interval:</string>
+    <string name="tv_amount_interval">Amount interval:</string>
+    <string name="bank_products">Bank products</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

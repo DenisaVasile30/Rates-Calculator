@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,9 @@ import java.util.concurrent.Callable;
 import eu.ase.ro.ratescalculator.asyncTask.AsyncTaskRunner;
 import eu.ase.ro.ratescalculator.asyncTask.Callback;
 import eu.ase.ro.ratescalculator.network.HttpManager;
+import eu.ase.ro.ratescalculator.util.ApplicationsAdapter;
 import eu.ase.ro.ratescalculator.util.BankProduct;
+import eu.ase.ro.ratescalculator.util.BankProductsAdapter;
 import eu.ase.ro.ratescalculator.util.BankProductsJsonParser;
 
 public class HomeFragment extends Fragment {
@@ -28,6 +31,7 @@ public class HomeFragment extends Fragment {
     //private static final String URL_BANK_PRODUCTS = "https://api.npoint.io/8d43a9f6d13b39feda92";
     private AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
     private List<BankProduct> bankProducts = new ArrayList<>();
+    private ListView lv_bank_products;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +42,11 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+
+        return view;
     }
 
     private void getBankProductsFromNetwork() {
@@ -58,7 +66,19 @@ public class HomeFragment extends Fragment {
                         Toast.LENGTH_LONG).show();
                 bankProducts.addAll(BankProductsJsonParser.fromJson(result));
                 Log.i("bank prod: ", String.valueOf(bankProducts.size()));
+                setBankProductsAdapter(getView());
             }
         };
+    }
+    private void setBankProductsAdapter(View view) {
+        if (getContext() != null) {
+            lv_bank_products = view.findViewById(R.id.lv_bank_products);
+            Log.i("hereeeee", "here");
+            BankProductsAdapter adapter = new BankProductsAdapter(
+                    getContext(),
+                    R.layout.listview_bank_products,
+                    this.bankProducts);
+            lv_bank_products.setAdapter(adapter);
+        }
     }
 }

@@ -67,19 +67,11 @@ public class MyApplicationFragment extends Fragment {
 
         if (getContext() != null) {
             lv_applications = view.findViewById(R.id.lv_applications);
-//            ApplicationsAdapter adapter = new ApplicationsAdapter(
-//                    getContext(),
-//                    R.layout.listview_applications,
-//                    this.submitedDataList, getLayoutInflater());
-//            lv_applications.setAdapter(adapter);
-
             ApplicationsAdapter adapter = new ApplicationsAdapter(
                     getContext(),
                     R.layout.listview_applications,
                     this.submitedDataList);
             lv_applications.setAdapter(adapter);
-
-            //adapter.notifyAdapter(lv_applications);
         }
     }
 
@@ -87,7 +79,4 @@ public class MyApplicationFragment extends Fragment {
         ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
         adapter.notifyDataSetChanged();
     }
-
-
-
 }
