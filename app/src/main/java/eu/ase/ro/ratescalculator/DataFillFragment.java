@@ -3,10 +3,8 @@ package eu.ase.ro.ratescalculator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -32,9 +26,13 @@ import androidx.fragment.app.Fragment;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import eu.ase.ro.ratescalculator.asyncTask.Callback;
+import eu.ase.ro.ratescalculator.database.Deposit;
+import eu.ase.ro.ratescalculator.database.DepositContactService;
+import eu.ase.ro.ratescalculator.database.DepositService;
 import eu.ase.ro.ratescalculator.util.ApplicationsAdapter;
 import eu.ase.ro.ratescalculator.util.Credit;
-import eu.ase.ro.ratescalculator.util.SubmitedData;
+import eu.ase.ro.ratescalculator.database.SubmitedData;
 
 public class DataFillFragment extends Fragment {
 
@@ -50,26 +48,14 @@ public class DataFillFragment extends Fragment {
     private int month;
     private int year;
     private Credit receivedCredit;
-
-
-
-
+    private long idDeposit;
 
     private SubmitedData receivedDataFilled;
     private ListView lv_applications;
     private ArrayList<SubmitedData>  submitedDataList;
 
-
-    private ActivityResultLauncher<Intent> submitedDataLauncher;
-
-    private ActivityResultCallback<ActivityResult> getSubmitedDataActivityResultCallback(){
-        return new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                // info din submit data
-            }
-        };
-    }
+    private DepositContactService depositContactService;
+    private SubmitedData submitedData;
 
     public DataFillFragment() {}
 
@@ -92,19 +78,14 @@ public class DataFillFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        submitedDataLauncher = registerSubmitedDataLauncher();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Credit receivedCredit = bundle.getParcelable("creditDetails");
-
-            Log.i("creditDetailsReceived: ", receivedCredit.toString());
+            idDeposit = bundle.getLong("idDeposit");
+//            Log.i("id deposit: ", String.valueOf(idDeposit));
+//            Log.i("creditDetailsReceived: ", receivedCredit.toString());
         }
-
-    }
-
-    private ActivityResultLauncher<Intent> registerSubmitedDataLauncher() {
-        ActivityResultCallback<ActivityResult> callback = getSubmitedDataActivityResultCallback();
-        return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
+        depositContactService = new DepositContactService(getContext());
     }
 
     @Nullable
@@ -114,15 +95,15 @@ public class DataFillFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             receivedCredit = bundle.getParcelable("creditDetails");
-            initCreditDetailsView(receivedCredit, view);
-            Log.i("creditReceivedview: ", receivedCredit.toString());
+            if (receivedCredit != null) {
+                initCreditDetailsView(receivedCredit, view);
+                Log.i("creditReceivedview: ", receivedCredit.toString());
+            }
+            initComponents(view, receivedCredit, inflater, container);
         }
-        initComponents(view, receivedCredit, inflater, container);
 
         return view;
     }
-
-
 
     public static DataFillFragment newInstance(ArrayList<SubmitedData>  submitedDataList) {
         DataFillFragment fragment = new DataFillFragment();
@@ -145,19 +126,47 @@ public class DataFillFragment extends Fragment {
             initEmail(view);
             initDatePicker(view);
             initCancelButton(view);
-            initSubmitButton(view, receivedCredit);
-           // initAdapter(inflater, container);
-
-
-
+            if (receivedCredit != null) {
+                initSubmitButtonCredit(view, receivedCredit);
+            } else {
+                initSubmitButtonDeposit(view, idDeposit);
+            }
         }
     }
 
-
-    private void initSubmitButton(View view, Credit receivedCredit) {
+    private void initSubmitButtonDeposit(View view, long idDeposit) {
         btn_Sumbit = view.findViewById(R.id.btn_submit);
+        btn_Sumbit.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View view) {
+                if (checkValidData()) {
+                    SubmitedData submitedData = buildFromComponents(null);
+                    submitedData.setId_deposit(idDeposit);
+                    Toast.makeText(getContext().getApplicationContext(),
+                            submitedData.toStringContacts(),
+                            Toast.LENGTH_LONG).show();
+                    depositContactService.insert(submitedData, insertDepositContactCallback());
+
+                }
+            }
+        });
+    }
+
+    private Callback<SubmitedData> insertDepositContactCallback() {
+        return new Callback<SubmitedData>() {
+            @Override
+            public void runResultOnUiThread(SubmitedData result) {
+                if (result != null) {
+                    generateAlertDialog(R.string.data_inserted_succesfully, "", "Info");
+                }
+            }
+        };
+    }
 
 
+    private void initSubmitButtonCredit(View view, Credit receivedCredit) {
+        btn_Sumbit = view.findViewById(R.id.btn_submit);
         btn_Sumbit.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -178,32 +187,17 @@ public class DataFillFragment extends Fragment {
                             submitedData.toString(),
                             Toast.LENGTH_LONG).show();
 
-                    //ok
-//                    Log.i("newObjectCreated:", submitedData.toString());
-//
-//
-//                    MyApplicationFragment fragment = MyApplicationFragment.newInstance(submitedDataList);
-//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//
-//                    activity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragment_container,
-//                                    fragment).addToBackStack(null).commit();
-                    //ok
-
                     dataToSend.sendFilledData(submitedDataList);
-
                 }
             }
         });
 
     }
 
-
     private void notifyAdapter() {
         ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
         adapter.notifyDataSetChanged();
     }
-
 
     private SubmitedData buildFromComponents(Credit receivedCredit) {
         String firstName = tv_first_name.getText().toString();
@@ -214,7 +208,7 @@ public class DataFillFragment extends Fragment {
                 + String.valueOf(dtp.getMonth()) + "/"
                 + String.valueOf(dtp.getYear()) + "/"
         );
-        Log.i("receivedObject:", receivedCredit.toString());
+//        Log.i("receivedObject:", receivedCredit.toString());
         return new SubmitedData(firstName, lastName, phoneNumber,
                 email, dateToBeContacted, new Credit[]{receivedCredit});
     }
@@ -226,7 +220,6 @@ public class DataFillFragment extends Fragment {
             && isValidDate()) {
 
             return true;
-
         }
         return false;
     }

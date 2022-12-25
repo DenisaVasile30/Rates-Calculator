@@ -1,21 +1,70 @@
-package eu.ase.ro.ratescalculator.util;
+package eu.ase.ro.ratescalculator.database;
 
 
-import android.os.Build;
+import static androidx.room.ForeignKey.CASCADE;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "contacts",
+        foreignKeys = @ForeignKey(
+        entity = Deposit.class,
+        childColumns = "id_deposit",
+        parentColumns = "id_deposit",
+                onDelete = CASCADE
+        ))
 public class SubmitedData implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId_deposit() {
+        return id_deposit;
+    }
+
+    public void setId_deposit(long id_deposit) {
+        this.id_deposit = id_deposit;
+    }
+
+    @ColumnInfo(name = "id_deposit")
+    private long id_deposit;
+    @ColumnInfo(name = "first_name")
     private String firstName;
+
+    @ColumnInfo(name = "last_name")
     private String lastName;
+
+    @ColumnInfo(name = "phone_number")
     private String phoneNumber;
+
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "date_to_be_contacted")
     private String dateToBeContacted;
+
+    @Ignore
     private Object[] receivedObject;
 
-
+    @Ignore
     public SubmitedData(){}
 
+    @Ignore
     public SubmitedData(String firstName, String lastName, String phoneNumber,
                         String email, String dateToBeContacted, Object[] receivedObject) {
 
@@ -25,6 +74,16 @@ public class SubmitedData implements Parcelable {
         this.email = email;
         this.dateToBeContacted = dateToBeContacted;
         this.receivedObject = receivedObject;
+    }
+
+    public SubmitedData(long id, long id_deposit, String firstName, String lastName, String phoneNumber, String email, String dateToBeContacted) {
+        this.id = id;
+        this.id_deposit = id_deposit;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.dateToBeContacted = dateToBeContacted;
     }
 
     protected SubmitedData(Parcel in) {
@@ -122,5 +181,15 @@ public class SubmitedData implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(dateToBeContacted);
         parcel.writeArray(receivedObject);
+    }
+
+    public String toStringContacts() {
+        return "SubmitedData{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", dateToBeContacted='" + dateToBeContacted + '\'' +
+                '}';
     }
 }

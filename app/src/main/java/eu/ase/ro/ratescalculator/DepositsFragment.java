@@ -2,6 +2,7 @@ package eu.ase.ro.ratescalculator;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,12 +19,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 
-import eu.ase.ro.ratescalculator.util.Deposit;
+import eu.ase.ro.ratescalculator.asyncTask.Callback;
+import eu.ase.ro.ratescalculator.database.Deposit;
+import eu.ase.ro.ratescalculator.database.DepositService;
+import eu.ase.ro.ratescalculator.util.Credit;
 
 public class DepositsFragment extends Fragment {
 
@@ -39,16 +45,26 @@ public class DepositsFragment extends Fragment {
     private TextView tv_earnings_value;
     private TextView tv_accumulated_value;
     private ConstraintLayout constraint_group_depo;
+    private Button btnGetOffer;
     DecimalFormat df = new DecimalFormat("0.00");
+    private DepositService depositService;
+    private Deposit deposit;
 
     public DepositsFragment(){}
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        depositService = new DepositService(getContext());
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_deposits, container, false);
         initComponents(view);
+
         return view;
     }
 
@@ -59,8 +75,29 @@ public class DepositsFragment extends Fragment {
             initInterestValue(view);
             constraint_group_depo = view.findViewById(R.id.constraint_group_depo);
             initBtnCalculate(view);
-
+            initBtnGetOffer(view);
         }
+    }
+
+    private void initBtnGetOffer(View view) {
+        btnGetOffer = view.findViewById(R.id.btn_get_offer);
+        btnGetOffer.setOnClickListener(saveDeposit());
+
+    }
+
+    private View.OnClickListener saveDeposit() {
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (deposit != null) {
+                    //insert db
+                    depositService.insert(deposit, insertDepositCallback());
+                } else {
+                    generateAlertDialog(R.string.deposit_check_failed, "Info");
+                }
+            }
+        };
     }
 
     private void initBtnCalculate(View view) {
@@ -75,11 +112,13 @@ public class DepositsFragment extends Fragment {
             public void onClick(View view) {
                 btn_calculate.requestFocus();
                 if (isValidAmount() && isValidInterest()) {
-                    Deposit deposit = initDatas();
+                    deposit = initDatas();
                     Toast.makeText(getContext().getApplicationContext(),
                             deposit.toString(),
                             Toast.LENGTH_LONG).show();
                     constraint_group_depo.setVisibility(view.VISIBLE);
+
+
                     resetFilledData();
                 }
             }
@@ -215,5 +254,23 @@ public class DepositsFragment extends Fragment {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();;
+    }
+
+    private Callback<Deposit> insertDepositCallback() {
+        return new Callback<Deposit>() {
+            @Override
+            public void runResultOnUiThread(Deposit result) {
+                if (result != null) {
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = DataFillFragment.newInstance(null);
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("idDeposit", result.getId());
+                    fragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
+                }
+            }
+        };
     }
 }

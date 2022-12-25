@@ -1,14 +1,9 @@
 package eu.ase.ro.ratescalculator;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,9 +11,8 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import eu.ase.ro.ratescalculator.util.SubmitedData;
+import eu.ase.ro.ratescalculator.database.SubmitedData;
 
 public class MainActivity extends AppCompatActivity implements DataFillFragment.sendData {
 

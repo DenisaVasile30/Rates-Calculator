@@ -1,15 +1,55 @@
-package eu.ase.ro.ratescalculator.util;
+package eu.ase.ro.ratescalculator.database;
 
-import android.widget.TextView;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "deposits")
 public class Deposit {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_deposit")
+    private long id;
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @ColumnInfo(name = "deposited_value")
     private int tv_deposited_value;
+
+    @ColumnInfo(name = "interest_rate")
     private float tv_interest_rate_value;
+
+    @ColumnInfo(name = "tax_value")
     private float tv_interest_tax_value;
+
+    @ColumnInfo(name = "period")
     private int tv_period_value;
+
+    @ColumnInfo(name = "earnings")
     private float tv_earnings_value;
+
+    @ColumnInfo(name = "accumulated_value")
     private float tv_accumulated_value;
 
+    public Deposit(long id, int tv_deposited_value,
+                   int tv_period_value,
+                   float tv_interest_rate_value,
+                   float tv_interest_tax_value,
+                   float tv_earnings_value,
+                   float tv_accumulated_value) {
+        this.id = id;
+        this.tv_deposited_value = tv_deposited_value;
+        this.tv_period_value = tv_period_value;
+        this.tv_interest_rate_value = tv_interest_rate_value;
+        this.tv_interest_tax_value = tv_interest_tax_value;
+        this.tv_earnings_value = tv_earnings_value;
+        this.tv_accumulated_value = tv_accumulated_value;
+    }
+
+    @Ignore
     public Deposit(int tv_deposited_value,
                    int tv_period_value,
                    float tv_interest_rate_value,
@@ -82,5 +122,9 @@ public class Deposit {
                 ", tv_earnings_value=" + tv_earnings_value +
                 ", tv_accumulated_value=" + tv_accumulated_value +
                 '}';
+    }
+
+    public long getId() {
+        return id;
     }
 }

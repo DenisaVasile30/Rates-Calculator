@@ -20,6 +20,10 @@
     <string name="hint_drag_the_seekbar">Drag the seekbar until you get the desired amount</string>
     <string name="amount_to_be_borrowed">The amount that can be borrowed for %1$s is between the equivalent of %2$s and %3$s RON</string>
     <string name="invalid_field">The %1$s field does not contain valid data!</string>
+    <string name="deposit_check_failed">You have to fill the data and press the "Calculate" button before trying to get the offer!</string>
+    <string name="data_inserted_succesfully">The data was saved successfully and you can see your registration in "Active applications" module!</string>
+    <string name="no_data_found">There is currently no active request for checked product to show.
+        You can register one in the correspondent module and come back later.</string>
     <string name="btn_get_offer">Get the offer</string>
     <string name="tv_deposit_calculator">Deposit calculator</string>
     <string name="tv_deposited_amount">Deposited amount: </string>
@@ -55,6 +59,9 @@
     <string name="tv_interest_interval">Interest interval:</string>
     <string name="tv_amount_interval">Amount interval:</string>
     <string name="bank_products">Bank products</string>
+    <string name="tv_credit">Credit</string>
+    <string name="tv_deposit">Deposit</string>
+    <string name="iv_delete">Delete</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>
@@ -67,19 +74,19 @@
         <item>35</item>
     </string-array>
     <string-array name="sp_deposit_period">
-        <item>1 luna</item>
-        <item>2 luni</item>
-        <item>3 luni</item>
-        <item>4 luni</item>
-        <item>5 luni</item>
-        <item>6 luni</item>
-        <item>7 luni</item>
-        <item>8 luni</item>
-        <item>9 luni</item>
-        <item>12 luni</item>
-        <item>18 luni</item>
-        <item>24 luni</item>
-        <item>36 luni</item>
-        <item>60 luni</item>
+        <item>1 month</item>
+        <item>2 months</item>
+        <item>3 months</item>
+        <item>4 months</item>
+        <item>5 months</item>
+        <item>6 months</item>
+        <item>7 months</item>
+        <item>8 months</item>
+        <item>9 months</item>
+        <item>12 months</item>
+        <item>18 months</item>
+        <item>24 months</item>
+        <item>36 months</item>
+        <item>60 months</item>
     </string-array>
 </resources>
