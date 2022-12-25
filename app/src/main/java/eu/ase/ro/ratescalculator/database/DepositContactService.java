@@ -59,4 +59,18 @@ public class DepositContactService {
         };
         asyncTaskRunner.executeAsync(deleteOperation, activityThread);
     }
+
+    public void deleteDepositContact(long id_deposit, Callback<Boolean> activityThread) {
+        Callable<Boolean> deleteItemOperation = new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                if (id_deposit < 0) {
+                    return false;
+                }
+                int count = depositContactDao.deleteDepositContact(id_deposit);
+                return count > 0;
+            }
+        };
+        asyncTaskRunner.executeAsync(deleteItemOperation, activityThread);
+    }
 }

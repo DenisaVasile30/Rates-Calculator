@@ -19,4 +19,6 @@ public interface DepositContactDao {
     @Delete
     int delete(SubmitedData submitedData);
 
+    @Query("DELETE FROM contacts where id_deposit= :id_deposit")
+    int deleteDepositContact(long id_deposit);
 }

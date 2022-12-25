@@ -24,6 +24,8 @@
     <string name="data_inserted_succesfully">The data was saved successfully and you can see your registration in "Active applications" module!</string>
     <string name="no_data_found">There is currently no active request for checked product to show.
         You can register one in the correspondent module and come back later.</string>
+    <string name="successfully_deleted">Selected item was successfully deleted.</string>
+    <string name="error_deleted">Selected item could not be deleted.</string>
     <string name="btn_get_offer">Get the offer</string>
     <string name="tv_deposit_calculator">Deposit calculator</string>
     <string name="tv_deposited_amount">Deposited amount: </string>

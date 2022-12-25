@@ -10,36 +10,22 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "contacts",
+//        indices = {@Index(value = {"id_deposit"}, unique = true)},
         foreignKeys = @ForeignKey(
         entity = Deposit.class,
         childColumns = "id_deposit",
         parentColumns = "id_deposit",
-                onDelete = CASCADE
+                onDelete = ForeignKey.CASCADE
         ))
 public class SubmitedData implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId_deposit() {
-        return id_deposit;
-    }
-
-    public void setId_deposit(long id_deposit) {
-        this.id_deposit = id_deposit;
-    }
 
     @ColumnInfo(name = "id_deposit")
     private long id_deposit;
@@ -84,6 +70,22 @@ public class SubmitedData implements Parcelable {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.dateToBeContacted = dateToBeContacted;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId_deposit() {
+        return id_deposit;
+    }
+
+    public void setId_deposit(long id_deposit) {
+        this.id_deposit = id_deposit;
     }
 
     protected SubmitedData(Parcel in) {

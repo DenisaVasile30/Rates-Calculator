@@ -1,17 +1,16 @@
 package eu.ase.ro.ratescalculator;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +38,7 @@ public class MyApplicationFragment extends Fragment {
     DepositContactService depositContactService;
     private List<SubmitedData> depositContactList = new ArrayList<>();
 
-    private ImageButton btn_delete;
+    SubmitedData selectedItemPosition = new SubmitedData();
 
     public MyApplicationFragment() {}
     @Override
@@ -76,34 +75,19 @@ public class MyApplicationFragment extends Fragment {
             initRadioButtons(view, submitedDataList);
             depositContactService.getAll(getAllDepositContactsCallback());
             Log.i("putExtraIntent:", String.valueOf(submitedDataList.size()));
-            //initBtnDelete(view);
         }
 
         return view;
     }
 
-    private void initBtnDelete(View view) {
-        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-
-        View rootView = inflater.inflate(R.layout.listview_applications,null,false);
-        btn_delete = (ImageButton) rootView.findViewById(R.id.ib_delete);
-        btn_delete.setOnClickListener(new View.OnClickListener() {
+    private AdapterView.OnItemClickListener getSelectedItem() {
+        return new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Button",Toast.LENGTH_LONG).show();
-                Log.i("value tv: ","good!");
-
-            }
-        });
-//        Log.i("value tv: ", tv_application_type.getText().toString());
-    }
-
-    private View.OnClickListener deleteClickedItem() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("value tv: ", "!!!!");
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SubmitedData selectedItem = (SubmitedData) lv_applications.getItemAtPosition(i);
+                long position = lv_applications.getItemIdAtPosition(i);
+                Log.i("selected value: ", selectedItem.toStringContacts() );
+                Log.i("selected position: ", String.valueOf(position));
             }
         };
     }
@@ -151,6 +135,9 @@ public class MyApplicationFragment extends Fragment {
                     getContext(),
                     R.layout.listview_applications,
                     (ArrayList<SubmitedData>) this.depositContactList);
+
+            lv_applications.setOnItemClickListener(getSelectedItem());
+
             lv_applications.setAdapter(adapter);
         }
     }
