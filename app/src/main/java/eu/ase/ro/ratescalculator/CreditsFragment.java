@@ -48,15 +48,16 @@ public class CreditsFragment extends Fragment {
     private ConstraintLayout constraint_group;
     private ArrayList<SubmitedData> submitedDataList;
 
+    public final String CREDIT_DETAILS = "creditDetails";
+
     public CreditsFragment() {}
-
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_credits, container, false);
         initComponents(view);
+
         return view;
     }
 
@@ -64,94 +65,105 @@ public class CreditsFragment extends Fragment {
         if (getContext() != null) {
             rg_credits_type = view.findViewById(R.id.rg_credits_type);
             rg_interest_rate = view.findViewById(R.id.rg_interest_rate);
-            tv_desired_amount = view.findViewById(R.id.tv_desired_amount_from_sb);
-            sp_credit_period = view.findViewById(R.id.sp_credit_period);
             tv_first_rate_value = view.findViewById(R.id.tv_first_rate_value);
             tv_total_payment_value = view.findViewById(R.id.tv_total_payment_value);
-            sw_salary_porting = view.findViewById(R.id.sw_salary_porting);
             tv_interest_value = view.findViewById(R.id.tv_interest_value);
-            sb_desired_amount = view.findViewById(R.id.sb_desired_amount);
-            btnGetOffer = view.findViewById(R.id.btn_get_offer);
             constraint_group = view.findViewById(R.id.constraint_group);
 
-
-            instantiateSalaryPorting(sw_salary_porting);
-
-            sb_desired_amount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    int prog = 2500;
-                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
-                        tv_desired_amount.setText(String.valueOf(progress * 1000));
-                    } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan) {
-                        Log.i("progress: ", String.valueOf(progress));
-                        tv_desired_amount.setText(String.valueOf((progress * prog) + 200000));
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar sb) {
-                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
-                        tv_desired_amount.setText(String.valueOf(1000));
-                    } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan){
-                        tv_desired_amount.setText(String.valueOf(200000));
-                    }
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar sb) {
-                }
-            });
-
-
-            sw_salary_porting.setOnCheckedChangeListener((compoundButton, b) -> {
-                if (sw_salary_porting.isChecked()) {
-                    tv_interest_value.setText(String.valueOf(9.99));
-                } else {
-                    tv_interest_value.setText(String.valueOf(11.2));
-                }
-                getCreditDetails();
-            });
-
-            tv_desired_amount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
-                        tv_desired_amount.setText(String.valueOf(1000));
-                    } else {
-                        tv_desired_amount.setText(String.valueOf(200000));
-                    }
-                }
-            });
-
-            tv_desired_amount.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                    getCreditDetails();
-                    constraint_group.setVisibility(getView().VISIBLE);
-                }
-            });
-            
-            // don t forget to validate data!!!
-            sp_credit_period.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    getCreditDetails();
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                }
-            });
+            initDesiredAmount(view);
+            initSalaryPorting(view);
+            initDesiredAmountSb(view);
+            initPeriod(view);
+            initBtnGetOffer(view);
         }
+    }
 
+    private void initBtnGetOffer(View view) {
+        btnGetOffer = view.findViewById(R.id.btn_get_offer);
         btnGetOffer.setOnClickListener(getSavedOffer());
+    }
+
+    private void initPeriod(View view) {
+        sp_credit_period = view.findViewById(R.id.sp_credit_period);
+        sp_credit_period.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getCreditDetails();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+    }
+
+    private void initDesiredAmount(View view) {
+        tv_desired_amount = view.findViewById(R.id.tv_desired_amount_from_sb);
+        tv_desired_amount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                    tv_desired_amount.setText(String.valueOf(1000));
+                } else {
+                    tv_desired_amount.setText(String.valueOf(200000));
+                }
+            }
+        });
+
+        tv_desired_amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                getCreditDetails();
+                constraint_group.setVisibility(getView().VISIBLE);
+            }
+        });
+    }
+
+    private void initSalaryPorting(View view) {
+        sw_salary_porting = view.findViewById(R.id.sw_salary_porting);
+        if (sw_salary_porting.isChecked()) {
+            tv_interest_value.setText(String.valueOf(9.99));
+        } else {
+            tv_interest_value.setText(String.valueOf(11.2));
+        }
+        sw_salary_porting.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (sw_salary_porting.isChecked()) {
+                tv_interest_value.setText(String.valueOf(9.99));
+            } else {
+                tv_interest_value.setText(String.valueOf(11.2));
+            }
+            getCreditDetails();
+        });
+    }
+
+    private void initDesiredAmountSb(View view) {
+        sb_desired_amount = view.findViewById(R.id.sb_desired_amount);
+        sb_desired_amount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int prog = 2500;
+                if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                    tv_desired_amount.setText(String.valueOf(progress * 1000));
+                } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan) {
+                    tv_desired_amount.setText(String.valueOf((progress * prog) + 200000));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar sb) {
+                if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_personal_loan) {
+                    tv_desired_amount.setText(String.valueOf(1000));
+                } else if (rg_credits_type.getCheckedRadioButtonId() == R.id.rg_credits_mortgage_loan){
+                    tv_desired_amount.setText(String.valueOf(200000));
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar sb) {}
+        });
     }
 
     private View.OnClickListener getSavedOffer() {
@@ -162,7 +174,6 @@ public class CreditsFragment extends Fragment {
                 if (tv_desired_amount.getText().toString().length() != 0) {
                     if (creditAmountIsValid()) {
                         Credit credit = buildFromComponents();
-
                         Toast.makeText(getContext().getApplicationContext(),
                                 credit.toString(),
                                 Toast.LENGTH_LONG).show();
@@ -170,7 +181,7 @@ public class CreditsFragment extends Fragment {
                         AppCompatActivity activity = (AppCompatActivity) view.getContext();
                         Fragment fragment = DataFillFragment.newInstance(submitedDataList);
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable("creditDetails", credit);
+                        bundle.putParcelable(CREDIT_DETAILS, credit);
                         fragment.setArguments(bundle);
                         activity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container,
@@ -182,7 +193,6 @@ public class CreditsFragment extends Fragment {
                             R.string.info_get_offer,
                             Toast.LENGTH_LONG).show();
                 }
-
             }
         };
     }
@@ -203,18 +213,9 @@ public class CreditsFragment extends Fragment {
                 interestValue, firstRateValue, totalPaymentValue);
     }
 
-    private void instantiateSalaryPorting(Switch sw_salary_porting) {
-        if (sw_salary_porting.isChecked()) {
-            tv_interest_value.setText(String.valueOf("9.99"));
-        } else {
-            tv_interest_value.setText(String.valueOf("11.2"));
-        }
-    }
-
     private void getCreditDetails() {
-        Log.i("credit details","here we go");
         DecimalFormat df = new DecimalFormat("0.00");
-        if ( creditAmountIsValid()) {
+        if (creditAmountIsValid()) {
             double interestValue = Double.parseDouble(tv_interest_value.getText().toString());
             if ((tv_desired_amount.getText().toString().length()) != 0) {
                 int desiredAmount = Integer.parseInt(tv_desired_amount.getText().toString());
@@ -239,7 +240,11 @@ public class CreditsFragment extends Fragment {
                         || !(Integer.parseInt(tv_desired_amount.getText().toString()) >= 1000)
                 ){
                     generateAlertDialog(R.string.amount_to_be_borrowed,
-                            "Personal loan", "1000", "100.000", "Amount personal loan limit");
+                            getString(R.string.personal_loan),
+                            getString(R.string.value_1000),
+                            getString(R.string.value_100000),
+                            getString(R.string.title_personal_loan)
+                    );
                     tv_desired_amount.setText(String.valueOf(100000));
                     return false;
                 }
@@ -251,7 +256,10 @@ public class CreditsFragment extends Fragment {
                             || !(Integer.parseInt(tv_desired_amount.getText().toString()) >= 200000)
                     ){
                         generateAlertDialog(R.string.amount_to_be_borrowed,
-                                "Mortgage loan", "200.000", "450.000", "Amount mortgage loan limit");
+                                getString(R.string.mortgage_loan),
+                                getString(R.string.value_200000),
+                                getString(R.string.value_450000),
+                                getString(R.string.title_mortgage_loan));
                         tv_desired_amount.setText(String.valueOf(450000));
                         return false;
                     }
@@ -267,11 +275,10 @@ public class CreditsFragment extends Fragment {
                 getString(stringResId,
                         arg1, arg2, arg3 ));
         builder.setTitle(title);
-        builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
-            // If user click no then dialog box is canceled.
+        builder.setNegativeButton(R.string.text_OK, (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.cancel();
         });
         AlertDialog alertDialog = builder.create();
-        alertDialog.show();;
+        alertDialog.show();
     }
 }

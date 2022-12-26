@@ -67,6 +67,26 @@
     <string name="tv_deposit">Deposit</string>
     <string name="iv_delete">Delete</string>
     <string name="tv_edit">Edit</string>
+    <string name="personal_loan">Personal loan</string>
+    <string name="value_1000">1000</string>
+    <string name="value_100000">100.000</string>
+    <string name="title_personal_loan">Amount personal loan limit</string>
+    <string name="mortgage_loan">Mortgage loan</string>
+    <string name="value_200000">200.000</string>
+    <string name="value_450000">450.000</string>
+    <string name="title_mortgage_loan">Amount mortgage loan limit</string>
+    <string name="text_OK">Ok</string>
+    <string name="info">Info</string>
+    <string name="email">\" e-mail \"</string>
+    <string name="email_format">E-mail format: xxxxx@******</string>
+    <string name="phone_number">\" phone number \"</string>
+    <string name="format_phone_number">Phone number format: 07xxxxxxxx</string>
+    <string name="first_name">\" first name \"</string>
+    <string name="title_first_name">Invalid first name</string>
+    <string name="last_name">\" last name \"</string>
+    <string name="title_last_name">Invalid last name</string>
+    <string name="date">\" date \"</string>
+    <string name="title_date">Invalid Date</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

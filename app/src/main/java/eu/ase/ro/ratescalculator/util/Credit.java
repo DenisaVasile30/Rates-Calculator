@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Credit implements Parcelable {
+
     String loanType;
     int desiredAmount;
     int period;
@@ -13,7 +14,8 @@ public class Credit implements Parcelable {
     float totalPaymentValue;
 
     public Credit(String loanType, int desiredAmount, int period, boolean collectSalary,
-                  float interestValue, float firstRateValue, float totalPaymentValue) {
+                  float interestValue, float firstRateValue, float totalPaymentValue)
+    {
         this.loanType = loanType;
         this.desiredAmount = desiredAmount;
         this.period = period;
@@ -48,55 +50,42 @@ public class Credit implements Parcelable {
     public String getLoanType() {
         return loanType;
     }
-
     public void setLoanType(String loanType) {
         this.loanType = loanType;
     }
-
     public int getDesiredAmount() {
         return desiredAmount;
     }
-
     public void setDesiredAmount(int desiredAmount) {
         this.desiredAmount = desiredAmount;
     }
-
     public int getPeriod() {
         return period;
     }
-
     public void setPeriod(int period) {
         this.period = period;
     }
-
     public boolean isCollectSalary() {
         return collectSalary;
     }
-
     public void setCollectSalary(boolean collectSalary) {
         this.collectSalary = collectSalary;
     }
-
     public double getInterestValue() {
         return interestValue;
     }
-
     public void setInterestValue(float interestValue) {
         this.interestValue = interestValue;
     }
-
     public double getFirstRateValue() {
         return firstRateValue;
     }
-
     public void setFirstRateValue(float firstRateValue) {
         this.firstRateValue = firstRateValue;
     }
-
     public double getTotalPaymentValue() {
         return totalPaymentValue;
     }
-
     public void setTotalPaymentValue(float totalPaymentValue) {
         this.totalPaymentValue = totalPaymentValue;
     }
