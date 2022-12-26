@@ -122,6 +122,10 @@ public class Deposit {
         this.tv_accumulated_value = tv_accumulated_value;
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Deposit{" +
@@ -132,9 +136,5 @@ public class Deposit {
                 ", tv_earnings_value=" + tv_earnings_value +
                 ", tv_accumulated_value=" + tv_accumulated_value +
                 '}';
-    }
-
-    public long getId() {
-        return id;
     }
 }

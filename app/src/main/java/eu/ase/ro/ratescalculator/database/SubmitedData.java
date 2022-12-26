@@ -88,40 +88,6 @@ public class SubmitedData implements Parcelable {
         this.id_deposit = id_deposit;
     }
 
-    protected SubmitedData(Parcel in) {
-        firstName = in.readString();
-        lastName = in.readString();
-        phoneNumber = in.readString();
-        email = in.readString();
-        dateToBeContacted = in.readString();
-        receivedObject = in.readArray(Object.class.getClassLoader());
-
-    }
-
-    public static final Creator<SubmitedData> CREATOR = new Creator<SubmitedData>() {
-        @Override
-        public SubmitedData createFromParcel(Parcel in) {
-            return new SubmitedData(in);
-        }
-
-        @Override
-        public SubmitedData[] newArray(int size) {
-            return new SubmitedData[size];
-        }
-    };
-
-    @Override
-    public String toString() {
-        return "SubmitedData{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", dateToBeContacted='" + dateToBeContacted + '\'' +
-                ", receivedObject=" + receivedObject[0].toString() +
-                '}';
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -170,6 +136,40 @@ public class SubmitedData implements Parcelable {
         this.receivedObject = receivedObject;
     }
 
+    protected SubmitedData(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        phoneNumber = in.readString();
+        email = in.readString();
+        dateToBeContacted = in.readString();
+        receivedObject = in.readArray(Object.class.getClassLoader());
+
+    }
+
+    public static final Creator<SubmitedData> CREATOR = new Creator<SubmitedData>() {
+        @Override
+        public SubmitedData createFromParcel(Parcel in) {
+            return new SubmitedData(in);
+        }
+
+        @Override
+        public SubmitedData[] newArray(int size) {
+            return new SubmitedData[size];
+        }
+    };
+
+    @Override
+    public String toString() {
+        return "SubmitedData{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", dateToBeContacted='" + dateToBeContacted + '\'' +
+                ", receivedObject=" + receivedObject[0].toString() +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -192,6 +192,7 @@ public class SubmitedData implements Parcelable {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", dateToBeContacted='" + dateToBeContacted + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

@@ -43,6 +43,19 @@
         android:contentDescription="@string/iv_delete"
         />
 
+    <ImageView
+        android:id="@+id/ib_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintTop_toBottomOf="@+id/ib_delete"
+        app:layout_constraintRight_toRightOf="parent"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/tv_edit"
+        />
+
     <TextView
         android:id="@+id/tv_appl_type"
         android:layout_width="match_parent"

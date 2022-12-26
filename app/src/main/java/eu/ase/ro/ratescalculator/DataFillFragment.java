@@ -49,6 +49,9 @@ public class DataFillFragment extends Fragment {
     private int year;
     private Credit receivedCredit;
     private long idDeposit;
+    private long idDepositForEdit;
+    private long id;
+    private long creditPosition;
 
     private SubmitedData receivedDataFilled;
     private ListView lv_applications;
@@ -82,10 +85,44 @@ public class DataFillFragment extends Fragment {
         if (bundle != null) {
             Credit receivedCredit = bundle.getParcelable("creditDetails");
             idDeposit = bundle.getLong("idDeposit");
-//            Log.i("id deposit: ", String.valueOf(idDeposit));
+            idDepositForEdit = bundle.getLong("idDepositForEdit");
+            id = bundle.getLong("id");
+            Log.i("id deposit edit: ", String.valueOf(idDepositForEdit));
+
 //            Log.i("creditDetailsReceived: ", receivedCredit.toString());
+
         }
         depositContactService = new DepositContactService(getContext());
+        if (idDepositForEdit > 0 && id > 0) {
+            Log.i("here", "here");
+            fillDataForEdit(idDepositForEdit);
+        }
+    }
+
+    private void fillDataForEdit(long idDepositForEdit) {
+        depositContactService.getItemForEdit(idDepositForEdit, getItemForEditCallback());
+        Log.i("here", "here12");
+    }
+
+    private Callback<SubmitedData> getItemForEditCallback() {
+        return new Callback<SubmitedData>() {
+            @Override
+            public void runResultOnUiThread(SubmitedData result) {
+                if (result != null) {
+                    setData(result);
+                    Log.i("result: ", result.toStringContacts());
+                } else {
+                    Log.i("result: ", "none");
+                }
+            }
+        };
+    }
+
+    private void setData(SubmitedData result) {
+        tv_first_name.setText(result.getFirstName());
+        tv_last_name.setText(result.getLastName());
+        tv_phone.setText(result.getPhoneNumber());
+        tv_email.setText(result.getEmail());
     }
 
     @Nullable
@@ -142,15 +179,43 @@ public class DataFillFragment extends Fragment {
             public void onClick(View view) {
                 if (checkValidData()) {
                     SubmitedData submitedData = buildFromComponents(null);
-                    submitedData.setId_deposit(idDeposit);
-                    Toast.makeText(getContext().getApplicationContext(),
-                            submitedData.toStringContacts(),
-                            Toast.LENGTH_LONG).show();
-                    depositContactService.insert(submitedData, insertDepositContactCallback());
+                    if (idDepositForEdit > 0) {
+                        Log.i("update nedeed", "!");
+                        submitedData.setId_deposit(idDepositForEdit);
+                        submitedData.setId(id);
+                        depositContactService.update(submitedData, updateDepositContactCallback());
+                    } else {
+                        submitedData.setId_deposit(idDeposit);
+                        Toast.makeText(getContext().getApplicationContext(),
+                                submitedData.toStringContacts(),
+                                Toast.LENGTH_LONG).show();
+                        depositContactService.insert(submitedData, insertDepositContactCallback());
+                    }
 
                 }
             }
         });
+    }
+
+    private Callback<Boolean> updateDepositContactCallback() {
+        return new Callback<Boolean>() {
+            @Override
+            public void runResultOnUiThread(Boolean result) {
+                Log.i("result", String.valueOf(result));
+                if (result) {
+                    generateAlertDialog(R.string.successfully_updated, "", "Info");
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = new HomeFragment();
+
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
+                    Log.i("updated succes","!");
+                } else {
+                    Log.i("update error","!");
+                }
+            }
+        };
     }
 
     private Callback<SubmitedData> insertDepositContactCallback() {
@@ -208,6 +273,7 @@ public class DataFillFragment extends Fragment {
                 + String.valueOf(dtp.getMonth()) + "/"
                 + String.valueOf(dtp.getYear()) + "/"
         );
+
 //        Log.i("receivedObject:", receivedCredit.toString());
         return new SubmitedData(firstName, lastName, phoneNumber,
                 email, dateToBeContacted, new Credit[]{receivedCredit});

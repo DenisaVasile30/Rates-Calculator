@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements DataFillFragment.
 
         setContentView(R.layout.activity_main);
 
-//        submitedDataLauncher = registerSubmitedDataLauncher();
-
         NavigationBarView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(navListener);
 
@@ -43,10 +41,6 @@ public class MainActivity extends AppCompatActivity implements DataFillFragment.
                 new HomeFragment()).commit();
     }
 
-//    private ActivityResultLauncher<Intent> registerSubmitedDataLauncher() {
-//        ActivityResultCallback<ActivityResult> callback = getSubmitedDataActivityResultCallback();
-//        return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
-//    }
 
     private NavigationBarView.OnItemSelectedListener navListener =
             new NavigationBarView.OnItemSelectedListener() {

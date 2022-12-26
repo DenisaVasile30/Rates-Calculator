@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class MyApplicationFragment extends Fragment {
         if (bundle != null) {
             SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
             submitedDataList = bundle.getParcelableArrayList("submitedDataList");
-            Log.i("list size on create:", String.valueOf(submitedDataList.size()));
+//            Log.i("list size on create:", String.valueOf(submitedDataList.size()));
 
         }
         
@@ -65,7 +66,7 @@ public class MyApplicationFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelableArrayList("submitedDataList", submitedDataList);
         fragment.setArguments(args);
-        Log.i("list size new instance:", String.valueOf(submitedDataList.size()));
+//        Log.i("list size new instance:", String.valueOf(submitedDataList.size()));
         return fragment;
     }
 
@@ -80,7 +81,7 @@ public class MyApplicationFragment extends Fragment {
 //            initLV(submitedDataList);
             initRadioButtons(view, submitedDataList);
             depositContactService.getAll(getAllDepositContactsCallback());
-            Log.i("putExtraIntent:", String.valueOf(submitedDataList.size()));
+//            Log.i("putExtraIntent:", String.valueOf(submitedDataList.size()));
         }
 
         return view;
@@ -97,6 +98,36 @@ public class MyApplicationFragment extends Fragment {
 
                 ImageView btn_delete =  view.findViewById(R.id.ib_delete);
                 btn_delete.setOnClickListener(deleteClickedItem(position));
+
+                ImageView btn_edit =  view.findViewById(R.id.ib_edit);
+                btn_edit.setOnClickListener(editClickedItem(position));
+            }
+        };
+    }
+
+    private View.OnClickListener editClickedItem(long position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Edit",Toast.LENGTH_LONG).show();
+                if (rg_btn_credit.isChecked()) {
+                    generateAlertDialog(R.string.update_credit_error, "Info");
+
+                }   else {
+                    SubmitedData submitedData = depositContactList.get((int) position);
+                    Log.i("id depo: " , String.valueOf(submitedData.getId_deposit()));
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = DataFillFragment.newInstance(null);
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("idDepositForEdit", submitedData.getId_deposit());
+                    bundle.putLong("id", submitedData.getId());
+                    Log.i("id: ", String.valueOf(submitedData.getId()));
+                    fragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
+
+                }
             }
         };
     }

@@ -25,6 +25,8 @@
     <string name="no_data_found">There is currently no active request for checked product to show.
         You can register one in the correspondent module and come back later.</string>
     <string name="successfully_deleted">Selected item was successfully deleted.</string>
+    <string name="successfully_updated">Selected item was successfully updated.</string>
+    <string name="update_credit_error">This item cannot be updated.</string>
     <string name="error_deleted">Selected item could not be deleted.</string>
     <string name="btn_get_offer">Get the offer</string>
     <string name="tv_deposit_calculator">Deposit calculator</string>
@@ -64,6 +66,7 @@
     <string name="tv_credit">Credit</string>
     <string name="tv_deposit">Deposit</string>
     <string name="iv_delete">Delete</string>
+    <string name="tv_edit">Edit</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

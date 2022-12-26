@@ -20,5 +20,4 @@ public class AsyncTaskRunner {
                 Log.i("AsyncTaskRunner", "failed call executeAsync: " + ex.getMessage());
         }
     }
-
 }

@@ -12,5 +12,4 @@ public interface DepositDao {
 
     @Query("DELETE FROM deposits where id_deposit= :id_deposit")
     int deleteDeposit(long id_deposit);
-
 }

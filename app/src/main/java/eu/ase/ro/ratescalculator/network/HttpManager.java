@@ -19,9 +19,7 @@ public class HttpManager implements Callable<String> {
     private InputStream inputStream;
     private InputStreamReader inputStreamReader;
     private BufferedReader bufferedReader;
-
     private final String urlAddress;
-    private String result;
 
     public HttpManager(String urlAddress) {
         this.urlAddress = urlAddress;
@@ -36,7 +34,7 @@ public class HttpManager implements Callable<String> {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-           // closeConnections();
+            closeConnections();
         }
         return null;
     }
@@ -58,7 +56,6 @@ public class HttpManager implements Callable<String> {
             e.printStackTrace();
         }
         connection.disconnect();
-
     }
 
     @NonNull
