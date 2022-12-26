@@ -12,7 +12,9 @@ public class BankProduct {
     public String minimumAmount;
     public String maximumAmount;
 
-    public BankProduct(String type, Bank bankName, List<String> period, String minimumAmount, String maximumAmount) {
+    public BankProduct(String type, Bank bankName, List<String> period, String minimumAmount,
+                       String maximumAmount)
+    {
         this.type = type;
         this.bankName = bankName;
         this.period = period;

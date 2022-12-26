@@ -19,16 +19,13 @@ import java.util.concurrent.Callable;
 import eu.ase.ro.ratescalculator.asyncTask.AsyncTaskRunner;
 import eu.ase.ro.ratescalculator.asyncTask.Callback;
 import eu.ase.ro.ratescalculator.network.HttpManager;
-import eu.ase.ro.ratescalculator.util.ApplicationsAdapter;
 import eu.ase.ro.ratescalculator.util.BankProduct;
 import eu.ase.ro.ratescalculator.util.BankProductsAdapter;
 import eu.ase.ro.ratescalculator.util.BankProductsJsonParser;
 
 public class HomeFragment extends Fragment {
 
-//    private static final String URL_BANK_PRODUCTS = "https://jsonkeeper.com/b/CT32";
     private static final String URL_BANK_PRODUCTS = "https://api.npoint.io/f5b36fb8a09a04f1d290";
-    //private static final String URL_BANK_PRODUCTS = "https://api.npoint.io/8d43a9f6d13b39feda92";
     private AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
     private List<BankProduct> bankProducts = new ArrayList<>();
     private ListView lv_bank_products;
@@ -43,8 +40,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
 
         return view;
     }
@@ -65,15 +60,14 @@ public class HomeFragment extends Fragment {
                         result,
                         Toast.LENGTH_LONG).show();
                 bankProducts.addAll(BankProductsJsonParser.fromJson(result));
-                Log.i("bank prod: ", String.valueOf(bankProducts.size()));
                 setBankProductsAdapter(getView());
             }
         };
     }
+
     private void setBankProductsAdapter(View view) {
         if (getContext() != null) {
             lv_bank_products = view.findViewById(R.id.lv_bank_products);
-            Log.i("hereeeee", "here");
             BankProductsAdapter adapter = new BankProductsAdapter(
                     getContext(),
                     R.layout.listview_bank_products,

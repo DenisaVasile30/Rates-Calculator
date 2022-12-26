@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +22,6 @@ public class BankProductsAdapter extends ArrayAdapter<BankProduct> {
     private int resource;
     private List<BankProduct> bankProductArrayList;
 
-
     public BankProductsAdapter(@NonNull Context context, int resource,
                                List<BankProduct> bankProductArrayList)
     {
@@ -31,10 +29,6 @@ public class BankProductsAdapter extends ArrayAdapter<BankProduct> {
         this.context = context;
         this.resource = resource;
         this.bankProductArrayList = new ArrayList<BankProduct>(bankProductArrayList);
-
-        Log.i("data list adapteer:", String.valueOf(bankProductArrayList.size()));
-        //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
-
     }
 
     @NonNull
@@ -44,7 +38,12 @@ public class BankProductsAdapter extends ArrayAdapter<BankProduct> {
     }
 
     private View initListViewItems(int position, @NonNull ViewGroup parent) {
+        return instantiateData(position, parent);
+    }
+
+    private View instantiateData(int position, @NonNull ViewGroup parent) {
         @Nullable View convertView;
+
         String productType = getItem(position).getType();
         String bankName = getItem(position).getBankName().getName();
         List<String> interest = getItem(position).getBankName().getInterest();
@@ -58,19 +57,19 @@ public class BankProductsAdapter extends ArrayAdapter<BankProduct> {
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
 
-        if ( productType != null && !productType.trim().isEmpty()) {
+        if (productType != null && !productType.trim().isEmpty()) {
             addProductType(convertView, productType);
         }
         if (bankName != null && !bankName.trim().isEmpty()) {
             addBankName(convertView, bankName);
         }
-        if (interestValues != null && !interestValues.trim().isEmpty()) {
+        if (!interestValues.trim().isEmpty()) {
             addInterestValues(convertView, interestValues);
         }
-        if (amountValues != null && !amountValues.trim().isEmpty()) {
+        if (!amountValues.trim().isEmpty()) {
             addAmountValues(convertView, amountValues);
         }
-        if (contactInfo != null && !contactInfo.trim().isEmpty()) {
+        if (!contactInfo.trim().isEmpty()) {
             addContactInfo(convertView, contactInfo);
         }
 

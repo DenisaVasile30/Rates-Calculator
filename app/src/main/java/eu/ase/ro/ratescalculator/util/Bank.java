@@ -1,7 +1,5 @@
 package eu.ase.ro.ratescalculator.util;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +30,9 @@ public class Bank {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public List<String> getInterest() {
         return interest;
     }

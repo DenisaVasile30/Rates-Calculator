@@ -3,11 +3,9 @@ package eu.ase.ro.ratescalculator.util;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,15 +39,17 @@ public class BankProductsJsonParser {
                 period.add(arrayPeriod.getString(j));
             }
             JSONObject bankName = object.getJSONObject("BankName");
-
             getBankInnerObjects(results, period, object, type, bankName);
         }
-        Log.i("result size:", String.valueOf(results.size()));
 
         return results;
     }
 
-    private static List<BankProduct> getBankInnerObjects(List<BankProduct> results, List<String> period, JSONObject object, String type, JSONObject bankName) throws JSONException {
+    private static List<BankProduct> getBankInnerObjects(
+            List<BankProduct> results, List<String> period, JSONObject object, String type,
+            JSONObject bankName
+    ) throws JSONException
+    {
         for (int l = 0; l < 3; l++ ){
             List<String> interest = new ArrayList<>();
             JSONObject bank = bankName.getJSONObject("Name" + (l+1));
