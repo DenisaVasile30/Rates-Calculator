@@ -29,8 +29,6 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
     private SubmitedData selectedItem;
     private LayoutInflater inflater;
     private ArrayList<SubmitedData> submitedDataList;
-    private DepositContactService depositContactService;
-    private DepositService depositService;
 
     public ApplicationsAdapter(@NonNull Context context, int resource,
                                ArrayList<SubmitedData> submitedDataList) {
@@ -38,19 +36,10 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         this.context = context;
         this.resource = resource;
         this.submitedDataList = new ArrayList<SubmitedData>(submitedDataList);
-        setDepositContactService();
-        setDepositService();
+
         Log.i("data list adapteer:", String.valueOf(submitedDataList.size()));
         //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
 
-    }
-
-    public void setDepositContactService() {
-        this.depositContactService = new DepositContactService(this.context);
-    }
-
-    public void setDepositService() {
-        this.depositService = new DepositService(this.context);
     }
 
     @NonNull
@@ -81,8 +70,7 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
 
             // to do addSpecificDeposit()
         }
-        ImageView btn_delete =  convertView.findViewById(R.id.ib_delete);
-        btn_delete.setOnClickListener(deleteClickedItem(position, applicationType));
+
         Log.i("weAreOnTheRight", "!!");
        // Log.i("infor:", submitedData.getFirstName());
         addSubmitedName(convertView, firstName, lastName);
@@ -90,77 +78,6 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
 
 
         return convertView;
-    }
-
-    private View.OnClickListener deleteClickedItem(int position, String applicationType) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Button",Toast.LENGTH_LONG).show();
-                Log.i("button clicked at: ", String.valueOf(position));
-                Log.i("subm : ", String.valueOf(submitedDataList.get(0).toStringContacts()));
-                SubmitedData submitedData = submitedDataList.get(position);
-                Log.i("id depo: " , String.valueOf(submitedData.getId_deposit()));
-               // depositContactService.delete(submitedData, deleteDepositContactCallback(position));
-                if (applicationType == "Deposit") {
-                    depositContactService.deleteDepositContact(
-                            submitedData.getId_deposit(),
-                            deleteDepositContactItemCallback(submitedData.getId_deposit()));
-                } else {
-                    submitedDataList.remove(position);
-                    notifyDataSetChanged();
-                    Toast.makeText(getContext().getApplicationContext(),
-                            R.string.successfully_deleted,
-                            Toast.LENGTH_LONG).show();
-                }
-
-            }
-        };
-    }
-
-    private Callback<Boolean> deleteDepositContactItemCallback(long id_deposit) {
-        return new Callback<Boolean>() {
-            @Override
-            public void runResultOnUiThread(Boolean result) {
-                if (result) {
-                    depositService.deleteDeposit(id_deposit, deleteDepositItemCallback());
-                    Log.i("sters cu succes: ", "!");
-                    Toast.makeText(getContext().getApplicationContext(),
-                            R.string.successfully_deleted,
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Log.i("sters cu succes: ", "!");
-                    Toast.makeText(getContext().getApplicationContext(),
-                            R.string.error_deleted,
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-    }
-
-    private Callback<Boolean> deleteDepositItemCallback() {
-        return new Callback<Boolean>() {
-            @Override
-            public void runResultOnUiThread(Boolean result) {
-                if (result) {
-                } else {
-                    Log.i("eroare depo: ", "!");
-                }
-            }
-        };
-    }
-
-    private Callback<Boolean> deleteDepositContactCallback(int position) {
-        return new Callback<Boolean>() {
-            @Override
-            public void runResultOnUiThread(Boolean result) {
-                if (result) {
-                    Log.i("sters cu succes", "!!");
-                } else {
-                    Log.i("eroare stergere", "!!");
-                }
-            }
-        };
     }
 
     private void addSubmitedApplicationType(View view, String applicationType) {

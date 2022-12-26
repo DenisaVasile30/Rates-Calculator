@@ -23,8 +23,10 @@ import java.util.List;
 
 import eu.ase.ro.ratescalculator.asyncTask.Callback;
 import eu.ase.ro.ratescalculator.database.DepositContactService;
+import eu.ase.ro.ratescalculator.database.DepositService;
 import eu.ase.ro.ratescalculator.util.ApplicationsAdapter;
 import eu.ase.ro.ratescalculator.database.SubmitedData;
+import eu.ase.ro.ratescalculator.util.Credit;
 
 public class MyApplicationFragment extends Fragment {
 
@@ -39,12 +41,15 @@ public class MyApplicationFragment extends Fragment {
     private List<SubmitedData> depositContactList = new ArrayList<>();
 
     SubmitedData selectedItemPosition = new SubmitedData();
+    private DepositService depositService;
+
 
     public MyApplicationFragment() {}
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         depositContactService = new DepositContactService(getContext());
+        depositService = new DepositService(getContext());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
@@ -52,6 +57,7 @@ public class MyApplicationFragment extends Fragment {
             Log.i("list size on create:", String.valueOf(submitedDataList.size()));
 
         }
+        
     }
 
     public static MyApplicationFragment newInstance(ArrayList<SubmitedData>  submitedDataList) {
@@ -88,6 +94,69 @@ public class MyApplicationFragment extends Fragment {
                 long position = lv_applications.getItemIdAtPosition(i);
                 Log.i("selected value: ", selectedItem.toStringContacts() );
                 Log.i("selected position: ", String.valueOf(position));
+
+                ImageView btn_delete =  view.findViewById(R.id.ib_delete);
+                btn_delete.setOnClickListener(deleteClickedItem(position));
+            }
+        };
+    }
+
+    private View.OnClickListener deleteClickedItem(long position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String applicationType = "";
+                Toast.makeText(getContext(), "Button",Toast.LENGTH_LONG).show();
+                Log.i("button clicked at: ", String.valueOf(position));
+
+                if (rg_btn_credit.isChecked()) {
+                    Log.i("on credit delete", "!!");
+                    applicationType = "Credit";
+                    Log.i("size before del: ", String.valueOf(submitedDataList.size()));
+                    submitedDataList.remove((int)position);
+                    Log.i("size after del: ", String.valueOf(submitedDataList.size()));
+                    generateAlertDialog(R.string.successfully_deleted, "Info");
+                    initLV(submitedDataList);
+                }   else {
+                    applicationType = "Deposit";
+                    SubmitedData submitedData = depositContactList.get((int) position);
+                    Log.i("id depo: " , String.valueOf(submitedData.getId_deposit()));
+                    depositContactService.deleteDepositContact(
+                            submitedData.getId_deposit(),
+                            deleteDepositContactItemCallback(submitedData.getId_deposit()));
+                    Log.i("on deposit", "!!");
+                    initLVDeposits(depositContactList);
+
+                }
+            }
+        };
+    }
+
+    private Callback<Boolean> deleteDepositContactItemCallback(long id_deposit) {
+        return new Callback<Boolean>() {
+            @Override
+            public void runResultOnUiThread(Boolean result) {
+                if (result) {
+                    depositService.deleteDeposit(id_deposit, deleteDepositItemCallback());
+                    Log.i("sters cu succes: ", "!");
+                    generateAlertDialog(R.string.successfully_deleted, "Info");
+                } else {
+                    Log.i("sters cu succes: ", "!");
+                    generateAlertDialog(R.string.error_deleted, "Info");
+                }
+            }
+        };
+    }
+
+    private Callback<Boolean> deleteDepositItemCallback() {
+        return new Callback<Boolean>() {
+            @Override
+            public void runResultOnUiThread(Boolean result) {
+                if (result) {
+                    Log.i("sters cu succes: ", "!");
+                } else {
+                    Log.i("eroare depo: ", "!");
+                }
             }
         };
     }
