@@ -47,11 +47,13 @@ public class DepositsFragment extends Fragment {
     private ConstraintLayout constraint_group_depo;
     private Button btnGetOffer;
     DecimalFormat df = new DecimalFormat("0.00");
+
     private DepositService depositService;
     private Deposit deposit;
 
-    public DepositsFragment(){}
+    private final String ID_DEPOSIT = "idDeposit";
 
+    public DepositsFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +84,6 @@ public class DepositsFragment extends Fragment {
     private void initBtnGetOffer(View view) {
         btnGetOffer = view.findViewById(R.id.btn_get_offer);
         btnGetOffer.setOnClickListener(saveDeposit());
-
     }
 
     private View.OnClickListener saveDeposit() {
@@ -94,7 +95,8 @@ public class DepositsFragment extends Fragment {
                     //insert db
                     depositService.insert(deposit, insertDepositCallback());
                 } else {
-                    generateAlertDialog(R.string.deposit_check_failed, "Info");
+                    generateAlertDialog(R.string.deposit_check_failed,
+                            getString(R.string.info));
                 }
             }
         };
@@ -118,7 +120,6 @@ public class DepositsFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                     constraint_group_depo.setVisibility(view.VISIBLE);
 
-
                     resetFilledData();
                 }
             }
@@ -136,7 +137,6 @@ public class DepositsFragment extends Fragment {
         int days = (Integer.parseInt(period.substring(0, period.indexOf(" ")))) * 30;
 
         tv_interest_rate_value = getView().findViewById(R.id.tv_interest_rate_value);
-        // tv_interest_rate_value.setText(tv_interest_value.getText().toString());
         float interestRate = Float.parseFloat(tv_interest_value.getText().toString());
 
         tv_interest_tax_value = getView().findViewById(R.id.tv_interest_tax_value);
@@ -146,7 +146,6 @@ public class DepositsFragment extends Fragment {
         float calculatedInterest = (float)(depositedValue
                 * days * interestRate)
                 / (360 * 100);
-        Log.i("dobanda calculata: ", String.valueOf(calculatedInterest));
         calculatedInterest = Float.parseFloat(df.format(calculatedInterest));
         tv_interest_rate_value.setText(String.valueOf(calculatedInterest));
 
@@ -183,8 +182,7 @@ public class DepositsFragment extends Fragment {
         });
         tv_interest_value.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {                
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -194,8 +192,7 @@ public class DepositsFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) {}
         });
     }
 
@@ -208,7 +205,7 @@ public class DepositsFragment extends Fragment {
                 return true;
             }
         }
-        generateAlertDialog(R.string.info_complete_interest, "Invalid amount");
+        generateAlertDialog(R.string.info_complete_interest, getString(R.string.title_invalid_amount));
         tv_interest_value.setText(R.string.default_interest);
 
         return false;
@@ -232,12 +229,16 @@ public class DepositsFragment extends Fragment {
 
     private boolean isValidAmount() {
         if ( !((tv_deposit_amount_value.getText().toString()).trim()).equals("")) {
-            int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
-            if (depositedValue <= 100000) {
-                return true;
+            if (tv_deposit_amount_value.getText().toString().length() <= 6) {
+                int depositedValue = Integer.parseInt(tv_deposit_amount_value.getText().toString());
+                if (depositedValue <= 100000 && depositedValue >= 1500) {
+                    return true;
+                }
             }
         }
-        generateAlertDialog(R.string.info_maximum_depo, "Invalid amount");
+        generateAlertDialog(R.string.info_maximum_depo,
+                getString(R.string.title_invalid_amount)
+        );
         tv_deposit_amount_value.setText("");
 
         return false;
@@ -248,8 +249,8 @@ public class DepositsFragment extends Fragment {
         builder.setMessage(
                 getString(stringResId));
         builder.setTitle(title);
-        builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
-            // If user click no then dialog box is canceled.
+        builder.setNegativeButton(getString(R.string.text_OK),
+                (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.cancel();
         });
         AlertDialog alertDialog = builder.create();
@@ -264,7 +265,7 @@ public class DepositsFragment extends Fragment {
                     AppCompatActivity activity = (AppCompatActivity) getContext();
                     Fragment fragment = DataFillFragment.newInstance(null);
                     Bundle bundle = new Bundle();
-                    bundle.putLong("idDeposit", result.getId());
+                    bundle.putLong(ID_DEPOSIT, result.getId());
                     fragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container,

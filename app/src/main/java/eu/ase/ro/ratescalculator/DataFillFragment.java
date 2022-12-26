@@ -199,8 +199,11 @@ public class DataFillFragment extends Fragment {
                     generateAlertDialog(R.string.successfully_updated, "",
                             getString(R.string.info)
                     );
-                    Intent i = new Intent(getActivity(), MainActivity.class);
-                    startActivity(i);
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = new DepositsFragment();
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
                 } else {
                     Log.i("update error","!");
                 }
@@ -216,8 +219,11 @@ public class DataFillFragment extends Fragment {
                     generateAlertDialog(R.string.data_inserted_succesfully, "",
                             getString(R.string.info)
                     );
-                    Intent i = new Intent(getActivity(), MainActivity.class);
-                    startActivity(i);
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = new DepositsFragment();
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
                 }
             }
         };
@@ -246,8 +252,11 @@ public class DataFillFragment extends Fragment {
                     generateAlertDialog(R.string.data_inserted_succesfully, "",
                             getString(R.string.info)
                     );
-                    Intent i = new Intent(getActivity(), MainActivity.class);
-                    startActivity(i);
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment fragment = new CreditsFragment();
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    fragment).addToBackStack(null).commit();
                 }
             }
         });
@@ -309,11 +318,8 @@ public class DataFillFragment extends Fragment {
         btn_Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreditsFragment fragment = new CreditsFragment();
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container,
-                                fragment).addToBackStack(null).commit();
+                Intent i = new Intent(getActivity(), MainActivity.class);
+                startActivity(i);
             }
         });
     }
