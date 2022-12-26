@@ -93,7 +93,6 @@ public class DepositContactService {
                     return false;
                 }
                 int count = depositContactDao.update(submitedData);
-                Log.i("count", String.valueOf(count));
                 if (count <= 0) {
                     return false;
                 }

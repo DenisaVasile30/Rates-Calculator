@@ -36,10 +36,6 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         this.context = context;
         this.resource = resource;
         this.submitedDataList = new ArrayList<SubmitedData>(submitedDataList);
-
-        Log.i("data list adapteer:", String.valueOf(submitedDataList.size()));
-        //Log.i("data list elem ", String.valueOf(this.submitedDataList.get(0)));
-
     }
 
     @NonNull
@@ -52,11 +48,9 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         if (getItem(position).getReceivedObject() != null) {
             applicationType = "Credit";
             loanType =  ((Credit[]) getItem(position).getReceivedObject())[0].getLoanType();
-            Log.i("onCredit", "!!");
 
         } else {
             applicationType = "Deposit";
-            Log.i("on deposit", "!!");
         }
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
@@ -67,15 +61,10 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
             }
         } else {
             applicationType = "Deposit";
-
-            // to do addSpecificDeposit()
         }
 
-        Log.i("weAreOnTheRight", "!!");
-       // Log.i("infor:", submitedData.getFirstName());
         addSubmitedName(convertView, firstName, lastName);
         addSubmitedApplicationType(convertView, applicationType);
-
 
         return convertView;
     }
@@ -83,7 +72,6 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
     private void addSubmitedApplicationType(View view, String applicationType) {
         TextView tv = view.findViewById(R.id.tv_application_type);
         tv.setText(applicationType);
-
     }
 
     private void addSpecificCredit(View convertView, String loanType) {
@@ -108,12 +96,5 @@ public class ApplicationsAdapter extends ArrayAdapter<SubmitedData> {
         } else {
             textView.setText(R.string.tv_empty_val);
         }
-    }
-
-
-    public void notifyAdapter(ListView lv_applications) {
-
-        ApplicationsAdapter adapter = (ApplicationsAdapter) lv_applications.getAdapter();
-        adapter.notifyDataSetChanged();
     }
 }

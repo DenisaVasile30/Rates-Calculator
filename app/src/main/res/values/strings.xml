@@ -88,6 +88,7 @@
     <string name="date">\" date \"</string>
     <string name="title_date">Invalid Date</string>
     <string name="title_invalid_amount">Invalid amount</string>
+    <string name="info_operations">Please select a row in order to delete or update!</string>
     <string-array name="sp_credit_period">
         <item>1</item>
         <item>2</item>

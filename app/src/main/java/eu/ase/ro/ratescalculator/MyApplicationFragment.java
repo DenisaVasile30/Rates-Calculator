@@ -44,6 +44,11 @@ public class MyApplicationFragment extends Fragment {
     SubmitedData selectedItemPosition = new SubmitedData();
     private DepositService depositService;
 
+    private final String DATA_FILLED = "dataFilled";
+    private static final String SUBMITED_DATA_LIST = "submitedDataList";
+    public static final String ID_DEPOSIT = "idDeposit";
+    public static final String ID_DEPOSIT_FOR_EDIT = "idDepositForEdit";
+    public static final String ID = "id";
 
     public MyApplicationFragment() {}
     @Override
@@ -53,20 +58,19 @@ public class MyApplicationFragment extends Fragment {
         depositService = new DepositService(getContext());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            SubmitedData receivedDataFilled = bundle.getParcelable("dataFilled");
-            submitedDataList = bundle.getParcelableArrayList("submitedDataList");
-//            Log.i("list size on create:", String.valueOf(submitedDataList.size()));
-
+            SubmitedData receivedDataFilled = bundle.getParcelable(DATA_FILLED);
+            submitedDataList = bundle.getParcelableArrayList(SUBMITED_DATA_LIST);
         }
-        
+        generateAlertDialog(R.string.info_operations,
+                getString(R.string.info));
     }
 
     public static MyApplicationFragment newInstance(ArrayList<SubmitedData>  submitedDataList) {
         MyApplicationFragment fragment = new MyApplicationFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("submitedDataList", submitedDataList);
+        args.putParcelableArrayList(SUBMITED_DATA_LIST, submitedDataList);
         fragment.setArguments(args);
-//        Log.i("list size new instance:", String.valueOf(submitedDataList.size()));
+
         return fragment;
     }
 
@@ -78,10 +82,8 @@ public class MyApplicationFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-//            initLV(submitedDataList);
             initRadioButtons(view, submitedDataList);
             depositContactService.getAll(getAllDepositContactsCallback());
-//            Log.i("putExtraIntent:", String.valueOf(submitedDataList.size()));
         }
 
         return view;
@@ -111,7 +113,7 @@ public class MyApplicationFragment extends Fragment {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Edit",Toast.LENGTH_LONG).show();
                 if (rg_btn_credit.isChecked()) {
-                    generateAlertDialog(R.string.update_credit_error, "Info");
+                    generateAlertDialog(R.string.update_credit_error, getString(R.string.info));
 
                 }   else {
                     SubmitedData submitedData = depositContactList.get((int) position);
@@ -119,8 +121,8 @@ public class MyApplicationFragment extends Fragment {
                     AppCompatActivity activity = (AppCompatActivity) getContext();
                     Fragment fragment = DataFillFragment.newInstance(null);
                     Bundle bundle = new Bundle();
-                    bundle.putLong("idDepositForEdit", submitedData.getId_deposit());
-                    bundle.putLong("id", submitedData.getId());
+                    bundle.putLong(ID_DEPOSIT_FOR_EDIT, submitedData.getId_deposit());
+                    bundle.putLong(ID, submitedData.getId());
                     Log.i("id: ", String.valueOf(submitedData.getId()));
                     fragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction()
@@ -137,27 +139,18 @@ public class MyApplicationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String applicationType = "";
-                Toast.makeText(getContext(), "Button",Toast.LENGTH_LONG).show();
                 Log.i("button clicked at: ", String.valueOf(position));
 
                 if (rg_btn_credit.isChecked()) {
-                    Log.i("on credit delete", "!!");
-                    applicationType = "Credit";
-                    Log.i("size before del: ", String.valueOf(submitedDataList.size()));
                     submitedDataList.remove((int)position);
-                    Log.i("size after del: ", String.valueOf(submitedDataList.size()));
-                    generateAlertDialog(R.string.successfully_deleted, "Info");
+                    generateAlertDialog(R.string.successfully_deleted, getString(R.string.info));
                     initLV(submitedDataList);
                 }   else {
-                    applicationType = "Deposit";
                     SubmitedData submitedData = depositContactList.get((int) position);
-                    Log.i("id depo: " , String.valueOf(submitedData.getId_deposit()));
                     depositContactService.deleteDepositContact(
                             submitedData.getId_deposit(),
                             deleteDepositContactItemCallback(submitedData.getId_deposit()));
-                    Log.i("on deposit", "!!");
                     initLVDeposits(depositContactList);
-
                 }
             }
         };
@@ -169,11 +162,13 @@ public class MyApplicationFragment extends Fragment {
             public void runResultOnUiThread(Boolean result) {
                 if (result) {
                     depositService.deleteDeposit(id_deposit, deleteDepositItemCallback());
-                    Log.i("sters cu succes: ", "!");
-                    generateAlertDialog(R.string.successfully_deleted, "Info");
+                    generateAlertDialog(R.string.successfully_deleted,
+                            getString(R.string.info)
+                    );
                 } else {
-                    Log.i("sters cu succes: ", "!");
-                    generateAlertDialog(R.string.error_deleted, "Info");
+                    generateAlertDialog(R.string.error_deleted,
+                            getString(R.string.info)
+                    );
                 }
             }
         };
@@ -183,11 +178,7 @@ public class MyApplicationFragment extends Fragment {
         return new Callback<Boolean>() {
             @Override
             public void runResultOnUiThread(Boolean result) {
-                if (result) {
-                    Log.i("sters cu succes: ", "!");
-                } else {
-                    Log.i("eroare depo: ", "!");
-                }
+
             }
         };
     }
@@ -215,29 +206,25 @@ public class MyApplicationFragment extends Fragment {
                     depositContactList.clear();
                     depositContactList.addAll(result);
                     Log.i("depositContact: ", String.valueOf(depositContactList.size()));
-
                     initLVDeposits(depositContactList);
-
                 } else {
-                    generateAlertDialog(R.string.no_data_found, "Info");
-
+                    generateAlertDialog(R.string.no_data_found,
+                            getString(R.string.info)
+                    );
                 }
             }
         };
     }
 
     private void initLVDeposits(List<SubmitedData> depositContactList) {
-        Log.i("list size initLVDepo:", String.valueOf(this.depositContactList.size()));
 
         if (getContext() != null) {
-//            lv_applications = view.findViewById(R.id.lv_applications);
             ApplicationsAdapter adapter = new ApplicationsAdapter(
                     getContext(),
                     R.layout.listview_applications,
                     (ArrayList<SubmitedData>) this.depositContactList);
 
             lv_applications.setOnItemClickListener(getSelectedItem());
-
             lv_applications.setAdapter(adapter);
         }
     }
@@ -250,9 +237,10 @@ public class MyApplicationFragment extends Fragment {
                 if (submitedDataList.size() > 0) {
                     initLV(submitedDataList);
                 } else {
-                    generateAlertDialog(R.string.no_data_found, "Info");
+                    generateAlertDialog(R.string.no_data_found,
+                            getString(R.string.info)
+                    );
                     rg_btn_deposit.setChecked(true);
-
                 }
             }
         });
@@ -264,8 +252,8 @@ public class MyApplicationFragment extends Fragment {
         builder.setMessage(
                 getString(stringResId));
         builder.setTitle(title);
-        builder.setNegativeButton("Ok", (DialogInterface.OnClickListener) (dialog, which) -> {
-            // If user click no then dialog box is canceled.
+        builder.setNegativeButton(getString(R.string.text_OK),
+                (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.cancel();
         });
         AlertDialog alertDialog = builder.create();
@@ -274,10 +262,8 @@ public class MyApplicationFragment extends Fragment {
 
 
     private void initLV(ArrayList<SubmitedData> submitedDataList) {
-        Log.i("list size initLV:", String.valueOf(this.submitedDataList.size()));
 
         if (getContext() != null) {
-//            lv_applications = view.findViewById(R.id.lv_applications);
             ApplicationsAdapter adapter = new ApplicationsAdapter(
                     getContext(),
                     R.layout.listview_applications,
